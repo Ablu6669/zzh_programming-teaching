@@ -243,18 +243,9 @@ Next lesson we learn **variables** — giving data names so programs can remembe
           starter: '# 练习 1：输出两行文字\n# 在下面写你的代码\n\n',
           expectedOutput: 'Hello, World!\nI am learning Python\n',
           hints: [
-            {
-              zh: '【思路】想想程序一共要输出几行？每一行需要几次打印？',
-              en: 'Think: how many lines does the program need to output, and how many prints does each line take?',
-            },
-            {
-              zh: '【语法】用 `print("文字")`；每次调用 `print()` 输出后自动换行。',
-              en: 'Use `print("text")`; each `print()` call ends with an automatic newline.',
-            },
-            {
-              zh: '【步骤】写两个 print：第一个输出 Hello, World!，第二个输出 I am learning Python。大小写、逗号和感叹号都要与题目完全一致。',
-              en: 'Write two prints: the first outputs Hello, World!, the second outputs I am learning Python. Match the capitalization, comma and exclamation mark exactly.',
-            },
+            { zh: '程序要「开口说话」。回想一下讲解里，Python 用哪个函数能把一行文字显示到屏幕上？题目要求两行输出，也就需要两次这样的操作。', en: 'The program needs to speak. From the lecture, which Python function displays one line of text on the screen? The task asks for two lines of output, so you need two such operations.' },
+            { zh: '输出一行用 print(内容)。要打印的文字必须放进一对英文引号里。注意函数名全小写，括号要左右配对，代码里不能出现中文引号。', en: 'Print one line with print(content). The text to print must sit inside a pair of English quotes. The function name is all lowercase, the parentheses must be balanced, and no full-width quotes are allowed.' },
+            { zh: '写两条打印语句：第一句括号里是 "Hello, World!"，第二句是 "I am learning Python"。大小写、逗号、感叹号都要与题目逐字符一致。', en: 'Write two print statements: the first takes "Hello, World!", the second takes "I am learning Python". Match the capitalization, comma and exclamation mark exactly.' },
           ],
           solution: 'print("Hello, World!")\nprint("I am learning Python")\n',
         },
@@ -268,18 +259,9 @@ Next lesson we learn **variables** — giving data names so programs can remembe
           starter: '# 练习 2：输出三角形\n\n',
           expectedOutput: '*\n**\n***\n',
           hints: [
-            {
-              zh: '【思路】三行星号，每行比上一行多一个，想想需要几次打印。',
-              en: 'Three lines of stars, each one star longer than the last — how many prints do you need?',
-            },
-            {
-              zh: '【语法】字符串写在引号里：`print("*")`；一行里有几个星号完全由你决定。',
-              en: 'Strings go inside quotes: `print("*")`; how many stars are on a line is entirely up to you.',
-            },
-            {
-              zh: '【步骤】依次写 print("*")、print("**")、print("***")，每行星号数依次递增。',
-              en: 'Write print("*"), print("**"), print("***") in order, with one more star on each line.',
-            },
+            { zh: '三行星号，每一行都比上一行多一个。想想每行的内容差在哪，一共需要几次打印？', en: 'Three lines of stars, each one star longer than the last. What differs from line to line, and how many prints do you need in total?' },
+            { zh: '每一行调用一次 print，把星号组成的文字放进一对英文引号里：print("星号")。一行显示几个星号，取决于这对引号里写了几个。', en: 'Call print once per line, with the stars wrapped in English quotes: print("stars"). How many stars a line shows depends on how many you type between the quotes.' },
+            { zh: '依次写三条打印语句，引号里分别是 *、**、***，星号个数逐行加一；每条语句打完会自动换行。', en: 'Write three print statements whose quoted text is *, then **, then *** — one more star each line; each print breaks the line automatically.' },
           ],
           solution: 'print("*")\nprint("**")\nprint("***")\n',
         },
@@ -522,18 +504,9 @@ Next lesson we learn **operators**, so the numbers in the boxes can actually be 
           starter: '# 练习 1：计算并输出面积\nwidth = 7\nheight = 4\n# 在下面计算并输出\n\n',
           expectedOutput: '28\n',
           hints: [
-            {
-              zh: '【思路】面积 = 长 × 宽。想想程序分几步：先有数据，再计算，最后打印。',
-              en: 'Think: area = width × height. The program has three steps: have the data, compute, then print.',
-            },
-            {
-              zh: '【语法】乘法用 `*`；把结果交出来用 `print()`。',
-              en: 'Use `*` for multiplication; deliver the result with `print()`.',
-            },
-            {
-              zh: '【步骤】写 `area = width * height`（或直接 `print(width * height)`），输出应为 28。',
-              en: 'Write `area = width * height` (or directly `print(width * height)`); the output should be 28.',
-            },
+            { zh: '面积 = 长 × 宽。数据已经放在两个变量里了，想想程序分几步：先算出什么，再把什么交出去？', en: 'Area = width × height. The data already sits in two variables — think through the steps: what do you compute first, and what do you hand over afterwards?' },
+            { zh: '乘法运算符是 *。把算好的结果交给屏幕用 print(表达式)；也可以先把结果存进一个新变量（变量名 = 表达式），再打印这个变量。', en: 'The multiplication operator is *. Hand the result to the screen with print(expression); you may also store it in a new variable first (name = expression) and then print that variable.' },
+            { zh: '写 print(width * height)，或者先 area = width * height 再 print(area)。输出应为 28——只要一个数，不要多余文字。', en: 'Write print(width * height), or first area = width * height then print(area). The output should be 28 — just the number, no extra text.' },
           ],
           solution: 'width = 7\nheight = 4\nprint(width * height)\n',
         },
@@ -547,18 +520,9 @@ Next lesson we learn **operators**, so the numbers in the boxes can actually be 
           starter: '# 练习 2：摄氏 → 华氏\nc = 37\n# 在下面计算并输出\n\n',
           expectedOutput: '98.6\n',
           hints: [
-            {
-              zh: '【思路】题目已经给出公式，想想怎么把它翻译成一行 Python 计算。',
-              en: 'Think: the formula is given — how do you translate it into one line of Python?',
-            },
-            {
-              zh: '【语法】赋值 `f = c * 9 / 5 + 32`；乘法 `*`、除法 `/` 按公式顺序写。',
-              en: 'Assign `f = c * 9 / 5 + 32`; write `*` and `/` following the formula.',
-            },
-            {
-              zh: '【步骤】写 `f = c * 9 / 5 + 32` 然后 `print(f)`；`/` 会得到小数，正好输出 98.6。',
-              en: 'Write `f = c * 9 / 5 + 32` then `print(f)`; `/` yields a float, printing exactly 98.6.',
-            },
+            { zh: '题目已经把公式给你了，你的任务只是把它「翻译」成一行 Python 的计算语句，再把结果打印出来。', en: 'The formula is already given — your job is only to translate it into one line of Python computation, then print the result.' },
+            { zh: '赋值的写法是 变量名 = 表达式。照着公式从左到右写：乘法用 *、除法用 /，运算顺序和数学一致。最后把结果交给 print(变量名)。', en: 'Assignment is written as name = expression. Follow the formula left to right: * for multiplication, / for division, with the usual math precedence. Hand the result to print(name).' },
+            { zh: '写 f = c * 9 / 5 + 32，然后 print(f)。注意 / 在 Python 里做真除法、结果带小数，所以正好输出 98.6。', en: 'Write f = c * 9 / 5 + 32, then print(f). Note that / is true division in Python and yields a float, so the output is exactly 98.6.' },
           ],
           solution: 'c = 37\nf = c * 9 / 5 + 32\nprint(f)\n',
         },
@@ -811,18 +775,9 @@ Next lesson we learn **conditionals**: letting the program take different paths 
           starter: '# 练习 1：3775 秒 = ? 分 ? 秒\ntotal = 3775\n# 分钟 = total // 60，剩余秒 = total % 60\n\n',
           expectedOutput: '62\n55\n',
           hints: [
-            {
-              zh: '【思路】3775 秒里有多少个完整的 60 秒（分钟）？分完还剩多少秒？',
-              en: 'Think: how many whole 60-second minutes fit in 3775 seconds, and how many seconds are left over?',
-            },
-            {
-              zh: '【语法】整除取「分钟数」用 `//`，取「剩余秒数」用 `%`，各打印一次。',
-              en: 'Use `//` for the whole minutes and `%` for the leftover seconds; print each once.',
-            },
-            {
-              zh: '【步骤】`print(total // 60)` 输出 62，`print(total % 60)` 输出 55，共两行。',
-              en: 'Print `total // 60` (62) and `total % 60` (55), one per line.',
-            },
+            { zh: '先在纸上算一遍：3775 秒里有多少个完整的 60 秒？分完还剩几秒？这两个数各对应哪一种「除法」？', en: 'Work it out on paper first: how many whole 60-second minutes fit in 3775 seconds, and how many seconds are left over? Which kind of "division" produces each of those two numbers?' },
+            { zh: '求「完整份数」用整除运算符 //，求「剩下的余数」用 %。对 total 各算一次，并各打印一次。', en: 'Use the floor-division operator // for the whole count, and % for the leftover. Compute each once from total and print each once.' },
+            { zh: '写 print(total // 60) 输出 62，再写 print(total % 60) 输出 55，两行、顺序不能颠倒。', en: 'Write print(total // 60) to output 62, then print(total % 60) to output 55 — two lines, and the order matters.' },
           ],
           solution: 'total = 3775\nprint(total // 60)\nprint(total % 60)\n',
         },
@@ -836,18 +791,9 @@ Next lesson we learn **conditionals**: letting the program take different paths 
           starter: '# 练习 2：交换 a 和 b\na = 3\nb = 8\n# 在下面交换并输出\n\n',
           expectedOutput: '8 3\n',
           hints: [
-            {
-              zh: '【思路】交换就像两杯水互换，通常需要第三个空杯子——想想 Python 有没有更省事的办法。',
-              en: 'Think: swapping is like exchanging the water in two cups, which normally needs a third cup — does Python offer a shortcut?',
-            },
-            {
-              zh: '【语法】Python 支持多变量同时赋值：`a, b = b, a`；一次打印两个值用 `print(a, b)`。',
-              en: 'Python supports multiple assignment: `a, b = b, a`; print two values with `print(a, b)`.',
-            },
-            {
-              zh: '【步骤】写 `a, b = b, a` 完成交换，然后 `print(a, b)`，输出 `8 3`。',
-              en: 'Write `a, b = b, a` to swap, then `print(a, b)` — the output is `8 3`.',
-            },
+            { zh: '交换两杯水通常要借第三个空杯子。回想讲解里，Python 有一种「一行同时给多个变量赋值」的写法，不用中间人就能完成交换。', en: 'Swapping two cups of water normally needs a third empty cup. Recall from the lecture that Python has a way to assign several variables in one line — no middleman required to swap.' },
+            { zh: '多变量同时赋值的骨架是 变量1, 变量2 = 表达式1, 表达式2：右边的值先全部算好，再一起放进左边。一次打印两个值时，把它们用逗号隔开放进括号里。', en: 'The skeleton of multiple assignment is name1, name2 = expr1, expr2: the right side is fully evaluated first, then stored into the left together. To print two values at once, separate them with a comma inside the parentheses.' },
+            { zh: '写 a, b = b, a 完成交换，然后 print(a, b)。逗号分隔的两个值输出时会自动补一个空格，得到 8 3。', en: 'Write a, b = b, a to swap, then print(a, b). Two comma-separated values get one automatic space between them, giving 8 3.' },
           ],
           solution: 'a = 3\nb = 8\na, b = b, a\nprint(a, b)\n',
         },
@@ -1082,18 +1028,9 @@ Next lesson we learn **loops**: write repetitive work only once.`,
           starter: '# 练习 1：成绩等级\nscore = 85\n# 用 if / elif / else 输出等级\n\n',
           expectedOutput: 'B\n',
           hints: [
-            {
-              zh: '【思路】成绩从高到低共五档，想想程序应该先判断哪一档、后判断哪一档。',
-              en: 'Think: there are five grade bands from high to low — which band should the program check first, and which last?',
-            },
-            {
-              zh: '【语法】`if score >= 90:` 开头，接着 `elif score >= 80:`……最后 `else:` 兜底；每个分支里 `print("字母")`。',
-              en: 'Start with `if score >= 90:`, then `elif score >= 80:`... and finish with `else:`; print the letter inside each branch.',
-            },
-            {
-              zh: '【步骤】从高到低写 5 个分支：>=90 打印 A，>=80 打印 B，>=70 打印 C，>=60 打印 D，else 打印 F。注意冒号和缩进。',
-              en: 'Write 5 branches from high to low: >=90 prints A, >=80 prints B, >=70 prints C, >=60 prints D, else prints F. Mind the colons and indentation.',
-            },
+            { zh: '成绩从高到低共五档。想想应该先判断哪一档？如果先从 ≥60 问起，85 分会发生什么？命中某一档之后，程序该做的那件事是什么？', en: 'There are five grade bands from high to low. Which band should be tested first? If you started asking at ≥60, what would happen to a score of 85? And once a band matches, what should the program do?' },
+            { zh: '条件链的骨架：if 条件: / elif 条件: / else:。行尾冒号不能漏，分支里的代码缩进 4 个空格；每个分支里用 print("等级字母") 给出结果。', en: 'The chain skeleton: if condition: / elif condition: / else:. Do not omit the trailing colon, indent the branch body by 4 spaces, and give the result inside each branch with print("letter").' },
+            { zh: '从高到低写 5 个分支：>=90 打印 A，>=80 打印 B，>=70 打印 C，>=60 打印 D，else 打印 F。85 分命中第二档，输出 B。', en: 'Write 5 branches from high to low: >=90 prints A, >=80 prints B, >=70 prints C, >=60 prints D, else prints F. A score of 85 hits the second band, so the output is B.' },
           ],
           solution: 'score = 85\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("B")\nelif score >= 70:\n    print("C")\nelif score >= 60:\n    print("D")\nelse:\n    print("F")\n',
         },
@@ -1107,18 +1044,9 @@ Next lesson we learn **loops**: write repetitive work only once.`,
           starter: '# 练习 2：找最大值\na = 12\nb = 7\nc = 9\n# 在下面判断并输出最大值\n\n',
           expectedOutput: '12\n',
           hints: [
-            {
-              zh: '【思路】想想「谁是最大」可以怎么问：如果 a 比 b 和 c 都大，那 a 就是最大——三个数各问一遍。',
-              en: 'Think how to ask "who is the largest": if a is at least b and at least c, then a is the max — ask this for each of the three.',
-            },
-            {
-              zh: '【语法】用 `and` 连接两个比较：`a >= b and a >= c`；三个分支用 if / elif / else。',
-              en: 'Join two comparisons with `and`: `a >= b and a >= c`; use if / elif / else for the three branches.',
-            },
-            {
-              zh: '【步骤】依次判断：a>=b 且 a>=c 打印 a；elif b>=a 且 b>=c 打印 b；else 打印 c。最终输出 12。',
-              en: 'Check in turn: if a>=b and a>=c print a; elif b>=a and b>=c print b; else print c. The final output is 12.',
-            },
+            { zh: '「a 是最大」翻译成条件怎么说？——a 不小于 b，也不小于 c。让三个数轮流当「候选人」问一遍这个问题，谁的条件成立，谁就是答案。', en: 'How do you translate "a is the largest" into a condition? — a is not less than b, and not less than c. Let each of the three numbers take a turn as the candidate; whoever satisfies the condition is the answer.' },
+            { zh: '两个条件必须同时成立，用 and 连接着写；三种情况分别交给 if / elif / else。别忘了行尾冒号和分支缩进。', en: 'Two conditions that must hold at the same time are joined with and; the three cases map onto if / elif / else. Do not forget the trailing colons and the branch indentation.' },
+            { zh: 'if a >= b and a >= c: 打印 a；elif b >= a and b >= c: 打印 b；else: 打印 c。最终输出 12。', en: 'if a >= b and a >= c: print a; elif b >= a and b >= c: print b; else: print c. The final output is 12.' },
           ],
           solution: 'a = 12\nb = 7\nc = 9\nif a >= b and a >= c:\n    print(a)\nelif b >= a and b >= c:\n    print(b)\nelse:\n    print(c)\n',
         },
@@ -1367,18 +1295,9 @@ Next lesson we learn **functions**: packaging a block of code into a reusable to
           starter: '# 练习 1：累加\n# 提示：total = 0，循环里 total += i\n\n',
           expectedOutput: '5050\n',
           hints: [
-            {
-              zh: '【思路】「累加」需要一个存总数的变量，然后从 1 一路加到 100。',
-              en: 'Think: accumulating needs a variable that holds the running total, then add from 1 all the way to 100.',
-            },
-            {
-              zh: '【语法】`for i in range(1, 101):` 遍历 1~100；循环里 `total += i` 累加。',
-              en: 'Use `for i in range(1, 101):` to cover 1~100; accumulate with `total += i` inside.',
-            },
-            {
-              zh: '【步骤】循环外 `total = 0`；循环内 `total += i`；循环后 `print(total)`，得到 5050。',
-              en: 'Set `total = 0` before the loop; `total += i` inside; `print(total)` after — it yields 5050.',
-            },
+            { zh: '「累加」需要一个存钱罐变量：从 0 开始，每轮把一个新的数加进去。想想存钱罐应该在哪里创建？加的动作在哪里发生？最后在哪里打印？', en: 'Accumulating needs a piggy-bank variable: start at 0 and add a new number each round. Where should the piggy bank be created, where does the adding happen, and where do you print?' },
+            { zh: '循环骨架 for i in range(起点, 终点):——终点是「不含」的，想到 100 就要写到 101。累加用 total += i，且 total = 0 必须放在循环外面。', en: 'The loop skeleton is for i in range(start, stop): — the stop is exclusive, so to reach 100 you write 101. Accumulate with total += i, and total = 0 must live outside the loop.' },
+            { zh: '循环外 total = 0；循环体里 total += i；循环结束后 print(total)，得到 5050。', en: 'Set total = 0 before the loop; total += i inside; print(total) afterwards — the result is 5050.' },
           ],
           solution: 'total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)\n',
         },
@@ -1392,18 +1311,9 @@ Next lesson we learn **functions**: packaging a block of code into a reusable to
           starter: '# 练习 2：乘法口诀\n# 用 f-string: print(f"7 x {i} = {7*i}")\n\n',
           expectedOutput: '7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63\n',
           hints: [
-            {
-              zh: '【思路】9 行内容几乎一样，只有其中的数字在变——想想怎么用循环变量生成它。',
-              en: 'Think: the 9 lines are nearly identical, only the number changes — how can the loop variable generate it?',
-            },
-            {
-              zh: '【语法】`for i in range(1, 10):` 让 i 从 1 到 9；f-string 能把 i 和 7*i 嵌进文字。',
-              en: 'Use `for i in range(1, 10):` so i runs 1 to 9; an f-string can embed both i and 7*i into the text.',
-            },
-            {
-              zh: '【步骤】循环内写 `print(f"7 x {i} = {7 * i}")`；注意 x 和 = 两侧的空格要与题目一致。',
-              en: 'Inside the loop write `print(f"7 x {i} = {7 * i}")`; keep the spaces around x and = exactly as required.',
-            },
+            { zh: '九行内容长得几乎一样，只有数字在变。想想哪个数字从头到尾固定不变（直接写进文字里）？哪个数字从 1 走到 9（交给循环变量）？', en: 'The nine lines look almost identical — only the numbers change. Which number stays fixed the whole time (write it directly into the text), and which runs from 1 to 9 (leave that to the loop variable)?' },
+            { zh: 'for i in range(1, 10): 让 i 依次取 1~9。每行文字用 f-string 组装：引号前加 f，会变的数字放进花括号，固定的字符原样写在引号里。', en: 'for i in range(1, 10): makes i take 1 through 9. Assemble each line with an f-string: put f before the quote, wrap the changing numbers in braces, and write the fixed characters as-is inside the quotes.' },
+            { zh: '循环体里写 print(f"7 x {i} = {7 * i}")。x 和 = 两侧的空格必须与题目一致，逐字符匹配。', en: 'Inside the loop write print(f"7 x {i} = {7 * i}"). The spaces around x and = must match the required format character for character.' },
           ],
           solution: 'for i in range(1, 10):\n    print(f"7 x {i} = {7 * i}")\n',
         },
@@ -1652,18 +1562,9 @@ Next lesson we learn **lists**: storing a whole batch of data at once.`,
           starter: '# 练习 1：素数\ndef is_prime(n):\n    # 在下面实现\n    pass\n\n# 输出 20 以内的素数\n',
           expectedOutput: '2\n3\n5\n7\n11\n13\n17\n19\n',
           hints: [
-            {
-              zh: '【思路】素数的定义：大于 1 且只能被 1 和自身整除。程序要判断「有没有别的数能整除它」。',
-              en: 'Think: a prime is greater than 1 and divisible only by 1 and itself — the program must check "does any other number divide it?".',
-            },
-            {
-              zh: '【语法】用 `for i in range(2, n):` 逐个试除，`n % i == 0` 表示能整除；函数里用 `return True` / `return False` 给出结论。',
-              en: 'Test divisors with `for i in range(2, n):`; `n % i == 0` means it divides evenly; conclude with `return True` / `return False`.',
-            },
-            {
-              zh: '【步骤】is_prime 里：n < 2 返回 False；循环试除 2 到 n-1，一旦整除立即 return False；循环结束没发现则 return True。再 `for n in range(2, 20):`，是素数就打印。',
-              en: 'In is_prime: return False if n < 2; loop divisors 2..n-1 and return False on the first exact division; return True if the loop finds none. Then loop `for n in range(2, 20):` and print each prime.',
-            },
+            { zh: '素数的定义：大于 1，且除 1 和自身外没有别的因数。判断的核心就是拿比它小的数一个个去试除，一旦整除就提前「出局」。想想要试到哪为止？一个都没整除又说明什么？', en: 'A prime is greater than 1 and has no divisors besides 1 and itself. The core of the check is trial division by smaller numbers: one exact division means "out" immediately. Up to which number must you try, and what does it mean if none divides evenly?' },
+            { zh: '试除的循环骨架 for i in range(起点, 终点):；「能整除」的判断是余数为 0（用取余运算符比较）。函数给调用方结论用 return，后跟 True 或 False——一有定论就立刻返回。', en: 'The trial-division skeleton is for i in range(start, stop):; "divides evenly" means the remainder is 0 (compare with the remainder operator). Give the caller a verdict with return followed by True or False — return the moment you know.' },
+            { zh: 'is_prime 里：n < 2 先 return False；for i in range(2, n): 一旦 n % i == 0 立即 return False；循环走完没发现因数就 return True。再 for n in range(2, 20): 是素数就打印。', en: 'Inside is_prime: return False first if n < 2; then for i in range(2, n): return False on the first n % i == 0; if the loop finds no divisor, return True. Finally loop for n in range(2, 20): and print each prime.' },
           ],
           solution: 'def is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\nfor n in range(2, 20):\n    if is_prime(n):\n        print(n)\n',
         },
@@ -1677,18 +1578,9 @@ Next lesson we learn **lists**: storing a whole batch of data at once.`,
           starter: '# 练习 2：斐波那契\ndef fib(n):\n    # 返回前 n 个斐波那契数组成的列表\n    pass\n\n# 在下面输出\n',
           expectedOutput: '1\n1\n2\n3\n5\n8\n13\n21\n34\n55\n',
           hints: [
-            {
-              zh: '【思路】斐波那契的规律：每个数都是前两个数之和，开头两个都是 1。',
-              en: 'Think: each Fibonacci number is the sum of the previous two, and the first two are both 1.',
-            },
-            {
-              zh: '【语法】用两个变量滚动前进：`a, b = b, a + b`；把结果收集进列表用 `result.append(a)`。',
-              en: 'Roll two variables forward with `a, b = b, a + b`; collect results with `result.append(a)`.',
-            },
-            {
-              zh: '【步骤】fib 里：`result = []`，`a, b = 1, 1`，循环 n 次：先 append(a)，再 `a, b = b, a + b`，最后返回 result。主程序循环打印每个数。',
-              en: 'Inside fib: `result = []`, `a, b = 1, 1`; loop n times appending a then `a, b = b, a + b`; return result. Then loop and print each number.',
-            },
+            { zh: '斐波那契的规律：每个新数 = 前两个数之和，开头两个都是 1。想想用什么变量「记住」最近这两个数，又怎么让它们每一轮都往前挪一步？', en: 'The Fibonacci rule: each new number is the sum of the previous two, and the first two are both 1. What variables will "remember" those two latest numbers, and how do you slide them forward each round?' },
+            { zh: '让两个变量一起滚动前进的写法：变量1, 变量2 = 变量2, 变量1 + 变量2（右边先用旧值算好，再一起赋给左边）。把数收集进列表用 列表名.append(元素)。', en: 'Roll two variables forward together with name1, name2 = name2, name1 + name2 (the right side is computed from the old values first, then both are assigned together). Collect numbers into a list with list.append(item).' },
+            { zh: 'fib 里：result = []，a, b = 1, 1；循环 n 次，每轮先 result.append(a) 再 a, b = b, a + b；最后 return result。主程序拿到列表后逐个打印。', en: 'Inside fib: result = [], a, b = 1, 1; loop n times, each round result.append(a) then a, b = b, a + b; return result at the end. The main program then prints the numbers one by one.' },
           ],
           solution: 'def fib(n):\n    result = []\n    a, b = 1, 1\n    for _ in range(n):\n        result.append(a)\n        a, b = b, a + b\n    return result\n\nfor x in fib(10):\n    print(x)\n',
         },
@@ -1925,18 +1817,9 @@ Next lesson: more tricks with **strings**.`,
           starter: '# 练习 1：统计\nnums = [4, 8, 15, 16, 23, 42]\n# 在下面输出四行\n\n',
           expectedOutput: '108\n42\n4\n6\n',
           hints: [
-            {
-              zh: '【思路】四个统计量分别问的是：总共多少、最大多少、最小多少、有几个——各用什么工具量？',
-              en: 'Think: the four statistics ask the total, the max, the min, and how many — which tool measures each?',
-            },
-            {
-              zh: '【语法】`sum(nums)`、`max(nums)`、`min(nums)`、`len(nums)` 各打印一次。',
-              en: 'Print `sum(nums)`, `max(nums)`, `min(nums)` and `len(nums)` once each.',
-            },
-            {
-              zh: '【步骤】依次 print 四个结果：108、42、4、6，每个一行。',
-              en: 'Print the four results in order: 108, 42, 4, 6 — one per line.',
-            },
+            { zh: '四个输出分别回答四个问题：这批数加起来是多少？最大的多大？最小的多小？一共有几个？回想讲解里，列表课为这四个问题各准备了一个现成工具。', en: 'The four outputs answer four questions: what is the total, how big is the maximum, how small is the minimum, and how many are there? Recall that the lesson provided one ready-made tool for each of these.' },
+            { zh: '四个内置工具：sum(列表) 求和、max(列表) 取最大、min(列表) 取最小、len(列表) 数个数，各打印一次，顺序是和、大、小、个数。', en: 'The four built-in tools: sum(list) for the total, max(list) for the maximum, min(list) for the minimum, len(list) for the count — print each once, in the order total, max, min, count.' },
+            { zh: '依次写四行：print(sum(nums))、print(max(nums))、print(min(nums))、print(len(nums))，输出 108、42、4、6，每行一个数。', en: 'Write four lines: print(sum(nums)), print(max(nums)), print(min(nums)), print(len(nums)) — the outputs are 108, 42, 4, 6, one number per line.' },
           ],
           solution: 'nums = [4, 8, 15, 16, 23, 42]\nprint(sum(nums))\nprint(max(nums))\nprint(min(nums))\nprint(len(nums))\n',
         },
@@ -1950,18 +1833,9 @@ Next lesson: more tricks with **strings**.`,
           starter: '# 练习 2：偶数平方\n# 提示: [x*x for x in range(1, 11) if x % 2 == 0]\n\n',
           expectedOutput: '4\n16\n36\n64\n100\n',
           hints: [
-            {
-              zh: '【思路】拆成两个子问题：怎么从 1~10 里挑出偶数？挑出来之后怎么变成平方？',
-              en: 'Think of two sub-problems: how do you filter the evens from 1~10, and how do you turn each into its square?',
-            },
-            {
-              zh: '【语法】推导式结构：`[x * x for x in range(1, 11) if x % 2 == 0]`；逐行输出用 for 循环。',
-              en: 'The comprehension is `[x * x for x in range(1, 11) if x % 2 == 0]`; print line by line with a for loop.',
-            },
-            {
-              zh: '【步骤】先用推导式得到列表 result，再 `for v in result: print(v)`，依次输出 4、16、36、64、100。',
-              en: 'Build the list with the comprehension, then `for v in result: print(v)` outputs 4, 16, 36, 64, 100.',
-            },
+            { zh: '拆成两个子问题：怎么从 1~10 里「挑出」偶数？挑出来之后怎么把它「变成」平方？回想列表推导式怎么把筛选和加工写进同一行。', en: 'Split it into two sub-problems: how do you filter the evens out of 1~10, and how do you turn each one into its square? Recall how a comprehension puts the filtering and the transforming into one line.' },
+            { zh: '推导式骨架：[表达式 for 变量 in range(起点, 终点) if 筛选条件]。range 终点不含，想到 10 就要写到 11；筛选条件写「是偶数」的判断。得到列表后用 for 循环逐行打印。', en: 'The comprehension skeleton: [expression for variable in range(start, stop) if condition]. The stop is exclusive, so to reach 10 you write 11; the condition is your "is even" test. Then print line by line with a for loop.' },
+            { zh: '写 result = [x * x for x in range(1, 11) if x % 2 == 0]，再 for v in result: print(v)，依次输出 4、16、36、64、100。', en: 'Write result = [x * x for x in range(1, 11) if x % 2 == 0], then for v in result: print(v) — the outputs are 4, 16, 36, 64, 100.' },
           ],
           solution: 'result = [x * x for x in range(1, 11) if x % 2 == 0]\nfor v in result:\n    print(v)\n',
         },
@@ -2220,18 +2094,9 @@ Next lesson we learn **dicts and sets**: managing data by "label" instead of "nu
           starter: '# 练习 1：字符串统计\ns = "Hello Python"\n# 三行输出\n\n',
           expectedOutput: '12\nHELLO PYTHON\nH n\n',
           hints: [
-            {
-              zh: '【思路】三个问题分别问的是：有多长、变成大写是什么样、头和尾各是什么字符。',
-              en: 'Think: the three questions ask its length, its uppercase form, and its first and last characters.',
-            },
-            {
-              zh: '【语法】`len(s)` 求长度；`s.upper()` 转大写；`s[0]` 和 `s[-1]` 取首尾字符。',
-              en: 'Use `len(s)` for length, `s.upper()` for uppercase, and `s[0]` / `s[-1]` for the first and last characters.',
-            },
-            {
-              zh: '【步骤】三行 print：len(s) 得 12；s.upper() 得 HELLO PYTHON；`print(s[0], s[-1])` 得 `H n`。',
-              en: 'Three prints: `len(s)` gives 12; `s.upper()` gives HELLO PYTHON; `print(s[0], s[-1])` gives `H n`.',
-            },
+            { zh: '三个输出分别回答：这句话有多长？全部转成大写长什么样？第一个和最后一个字符各是谁？回想字符串课里对应的工具。', en: 'The three outputs answer: how long is the sentence, what does it look like fully uppercased, and who are the first and the last characters? Recall the matching tools from the strings lesson.' },
+            { zh: '求长度用 len(s)；转大写用 s.upper()（它返回新字符串，原串不变）；取第一个字符用 s[0]，取最后一个用 s[-1]（负下标从尾部数起）。一次打印两个值时用逗号隔开。', en: 'Length is len(s); uppercase is s.upper() (it returns a new string, the original is unchanged); the first character is s[0] and the last is s[-1] (negative indices count from the end). Separate two printed values with a comma.' },
+            { zh: '三行打印：print(len(s)) 得 12；print(s.upper()) 得 HELLO PYTHON；print(s[0], s[-1]) 得 H n（逗号会自动补空格）。', en: 'Three prints: print(len(s)) gives 12; print(s.upper()) gives HELLO PYTHON; print(s[0], s[-1]) gives H n (the comma adds the space).' },
           ],
           solution: 's = "Hello Python"\nprint(len(s))\nprint(s.upper())\nprint(s[0], s[-1])\n',
         },
@@ -2245,18 +2110,9 @@ Next lesson we learn **dicts and sets**: managing data by "label" instead of "nu
           starter: '# 练习 2：回文\ndef is_palindrome(s):\n    # 在下面实现\n    pass\n\nprint(is_palindrome("racecar"))\nprint(is_palindrome("hello"))\n',
           expectedOutput: 'True\nFalse\n',
           hints: [
-            {
-              zh: '【思路】回文的定义：正着读和倒着读一样。想想怎么得到「倒过来的字符串」。',
-              en: 'Think: a palindrome reads the same forwards and backwards — how do you obtain the reversed string?',
-            },
-            {
-              zh: '【语法】`s.lower()` 统一大小写；切片 `[::-1]` 反转字符串；比较用 `==`。',
-              en: 'Normalize case with `s.lower()`; reverse with the slice `[::-1]`; compare with `==`.',
-            },
-            {
-              zh: '【步骤】函数里：`t = s.lower()`，然后 `return t == t[::-1]`。主程序对两个单词各调用一次并打印结果。',
-              en: 'Inside the function: `t = s.lower()`, then `return t == t[::-1]`. Call it once per word and print the results.',
-            },
+            { zh: '回文就是正着读、倒着读一模一样。想想怎么把一个字符串「倒过来」？比较之前为什么必须先统一大小写？', en: 'A palindrome reads the same forwards and backwards. How do you get the reversed copy of a string? And why must you normalize the case before comparing?' },
+            { zh: '统一大小写用 s.lower()；反转字符串用切片 [::-1]；两个字符串是否一样用 == 比较。把比较的结果直接 return 给调用方。', en: 'Normalize case with s.lower(); reverse a string with the slice [::-1]; test whether two strings are identical with ==. Return the comparison result directly to the caller.' },
+            { zh: '函数里写 t = s.lower()，然后 return t == t[::-1]。主程序对两个单词各调用一次并打印，输出 True 和 False。', en: 'Inside the function write t = s.lower(), then return t == t[::-1]. The main program calls it once per word and prints the results: True and False.' },
           ],
           solution: 'def is_palindrome(s):\n    t = s.lower()\n    return t == t[::-1]\n\nprint(is_palindrome("racecar"))\nprint(is_palindrome("hello"))\n',
         },
@@ -2511,18 +2367,9 @@ Next lesson: **classes and objects** — packaging data and behavior into your o
           starter: '# 练习 1：词频\ntext = "the quick brown fox jumps over the lazy dog the end"\n# 用字典统计后输出三行\n\n',
           expectedOutput: 'the: 3\nfox: 1\ndog: 1\n',
           hints: [
-            {
-              zh: '【思路】「数单词出现几次」最省力的办法：造一个计分板，每见到一个单词就给它的分数加 1。',
-              en: 'Think: the easiest way to count words is a scoreboard — every time you see a word, add 1 to its score.',
-            },
-            {
-              zh: '【语法】累加用 `counts.get(w, 0) + 1`；输出格式用 f-string：`print(f"{w}: {counts[w]}")`。',
-              en: 'Accumulate with `counts.get(w, 0) + 1`; format the output with an f-string: `print(f"{w}: {counts[w]}")`.',
-            },
-            {
-              zh: '【步骤】先 split 循环累加计数；然后对 "the"、"fox"、"dog" 三个单词各打印一行 `单词: 次数`。',
-              en: 'Split and accumulate counts in a loop; then print one `word: count` line for each of "the", "fox" and "dog".',
-            },
+            { zh: '「数单词出现几次」最省力的办法是造一个计分板：每见到一个单词，就给它的分数加 1。想想第一次遇到某个单词时，怎么避免「查无此分」的报错？', en: 'The easiest way to count words is a scoreboard: every time you see a word, add 1 to its score. When you meet a word for the very first time, how do you avoid a "key not found" error?' },
+            { zh: '查计数用 字典.get(键, 0)——第二个参数的意思是「查不到就当 0」；然后把「查到的旧计数 + 1」存回同一个键。输出一行用 f-string 组装，冒号后面记得写空格。', en: 'Look up a count with dict.get(key, 0) — the second argument means "treat missing as 0"; then store "the old count + 1" back under the same key. Assemble each output line with an f-string, and remember the space after the colon.' },
+            { zh: '先 for w in text.split(): 循环累加计数；再对 "the"、"fox"、"dog" 三个单词各打印一行 f"{w}: {counts[w]}"，输出 the: 3、fox: 1、dog: 1。', en: 'First loop for w in text.split(): accumulating the counts; then print one line f"{w}: {counts[w]}" for each of "the", "fox" and "dog" — the outputs are the: 3, fox: 1, dog: 1.' },
           ],
           solution: 'text = "the quick brown fox jumps over the lazy dog the end"\ncounts = {}\nfor w in text.split():\n    counts[w] = counts.get(w, 0) + 1\nfor w in ["the", "fox", "dog"]:\n    print(f"{w}: {counts[w]}")\n',
         },
@@ -2536,18 +2383,9 @@ Next lesson: **classes and objects** — packaging data and behavior into your o
           starter: '# 练习 2：集合运算\nA = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7}\n# 三行输出：并集、交集、差集\n\n',
           expectedOutput: '1 2 3 4 5 6 7\n4 5\n1 2 3\n',
           hints: [
-            {
-              zh: '【思路】三个输出分别对应集合的哪种运算？以及怎么把一串数字变成「升序、空格分隔」的文字？',
-              en: 'Think: which set operation matches each output, and how do you turn numbers into ascending space-separated text?',
-            },
-            {
-              zh: '【语法】`A | B`、`A & B`、`A - B` 做并交差；`sorted(...)` 排序，元素先 `str(x)` 再用 `" ".join(...)` 拼接。',
-              en: 'Union/intersection/difference are `A | B`, `A & B`, `A - B`; sort with `sorted(...)`, convert with `str(x)` and glue with `" ".join(...)`.',
-            },
-            {
-              zh: '【步骤】三行 print，每行形如 `print(" ".join(str(x) for x in sorted(A | B)))`，交集、差集同理。',
-              en: 'Three prints, each like `print(" ".join(str(x) for x in sorted(A | B)))` — same for intersection and difference.',
-            },
+            { zh: '三个输出分别对应集合的哪三种运算？另外，集合是无序的，怎么把一串数字变成「升序、空格分隔」的一行文字？', en: 'Which of the three set operations does each output correspond to? Also, sets are unordered — how do you turn a bunch of numbers into one ascending, space-separated line of text?' },
+            { zh: '并、交、差分别写成 A | B、A & B、A - B；输出前先用 sorted(...) 排升序，再把每个数字转成文字，用 " ".join(...) 以空格拼接成一行。', en: 'Union, intersection and difference are written A | B, A & B, A - B; sort with sorted(...) first, then turn each number into text and glue them together into one line with " ".join(...).' },
+            { zh: '三行打印，每行形如 print(" ".join(str(x) for x in sorted(A | B)))，把运算换成 & 和 - 再来两行。输出依次是 1 2 3 4 5 6 7、4 5、1 2 3。', en: 'Three prints, each like print(" ".join(str(x) for x in sorted(A | B))); repeat with & and - for the other two. The outputs are 1 2 3 4 5 6 7, 4 5, and 1 2 3.' },
           ],
           solution: 'A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7}\nprint(" ".join(str(x) for x in sorted(A | B)))\nprint(" ".join(str(x) for x in sorted(A & B)))\nprint(" ".join(str(x) for x in sorted(A - B)))\n',
         },
@@ -2808,18 +2646,9 @@ Next lesson: **file I/O** — letting programs persist data to disk.`,
           starter: '# 练习 1：矩形类\nclass Rectangle:\n    # 在下面实现 __init__ / area / perimeter\n    pass\n\nr = Rectangle(3, 4)\n# 输出面积和周长\n',
           expectedOutput: '12\n14\n',
           hints: [
-            {
-              zh: '【思路】矩形需要记住哪两个数？又能回答哪两个问题（面积、周长）？',
-              en: 'Think: which two numbers must a rectangle remember, and which two questions can it answer (area, perimeter)?',
-            },
-            {
-              zh: '【语法】`def __init__(self, width, height):` 里写 `self.width = width`；方法如 `def area(self): return self.width * self.height`。',
-              en: 'In `def __init__(self, width, height):` write `self.width = width`; methods like `def area(self): return self.width * self.height`.',
-            },
-            {
-              zh: '【步骤】实现 __init__、area（宽×高）、perimeter（2*(宽+高)）；创建 Rectangle(3, 4) 后分别打印 area() 和 perimeter()。',
-              en: 'Implement __init__, area (width×height) and perimeter (2*(width+height)); create Rectangle(3, 4) and print area() then perimeter().',
-            },
+            { zh: '想想矩形要「记住」哪两个数，又能「回答」哪两个问题（面积、周长）。类里的构造方法负责记住，实例方法负责回答。', en: 'Think about which two numbers a rectangle must remember, and which two questions it can answer (area, perimeter). The constructor remembers; the instance methods answer.' },
+            { zh: '构造方法骨架：def __init__(self, 参数...): 里面写 self.属性 = 参数；实例方法骨架：def 方法名(self):，用 self.属性 参与计算并 return 结果。每个方法的第一个参数都是 self，构造方法的名字前后各两条下划线、不能拼错。', en: 'Constructor skeleton: def __init__(self, params): with self.attribute = parameter inside; instance method skeleton: def method_name(self): computing from the self attributes and returning the result. The first parameter of every method is self, and the constructor name needs exactly two underscores on each side — do not misspell it.' },
+            { zh: '实现 __init__（存 self.width、self.height）、area（return self.width * self.height）、perimeter（return 2 * (self.width + self.height)）；创建 Rectangle(3, 4) 后分别打印两个方法的结果，输出 12 和 14。', en: 'Implement __init__ (store self.width, self.height), area (return self.width * self.height) and perimeter (return 2 * (self.width + self.height)); create Rectangle(3, 4) and print both method results — 12 and 14.' },
           ],
           solution: 'class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        return self.width * self.height\n\n    def perimeter(self):\n        return 2 * (self.width + self.height)\n\n\nr = Rectangle(3, 4)\nprint(r.area())\nprint(r.perimeter())\n',
         },
@@ -2833,18 +2662,9 @@ Next lesson: **file I/O** — letting programs persist data to disk.`,
           starter: '# 练习 2：学生类\nclass Student:\n    # 在下面实现\n    pass\n\ns = Student("Alice", [90, 85, 88])\n# 输出 Alice: 87.67\n',
           expectedOutput: 'Alice: 87.67\n',
           hints: [
-            {
-              zh: '【思路】平均分怎么算：总分除以门数，最后保留两位小数。',
-              en: 'Think: the average is the total divided by the count, then rounded to two decimals.',
-            },
-            {
-              zh: '【语法】求平均用 `sum(列表) / len(列表)`；保留两位用 `round(x, 2)`；组装输出用 f-string。',
-              en: 'Average with `sum(list) / len(list)`; round with `round(x, 2)`; assemble output with an f-string.',
-            },
-            {
-              zh: '【步骤】Student 里存 self.name 和 self.scores；average 返回 `round(sum(self.scores) / len(self.scores), 2)`；最后 `print(f"{s.name}: {s.average()}")`。',
-              en: 'Store self.name and self.scores; average returns `round(sum(self.scores) / len(self.scores), 2)`; finish with `print(f"{s.name}: {s.average()}")`.',
-            },
+            { zh: '平均分 = 总分 ÷ 门数，最后保留两位小数。想想总分和门数分别从哪个属性来？保留两位小数该用讲解里的哪个工具？', en: 'The average is the total divided by the count, then rounded to two decimals. Which attribute gives you the total and the count, and which tool from the lesson rounds to two decimals?' },
+            { zh: '求和与计数用 sum(列表) 和 len(列表)；保留两位小数用 round(数值, 2)；组装输出用 f-string，把姓名和平均分分别嵌进花括号。', en: 'Total and count come from sum(list) and len(list); round to two decimals with round(value, 2); assemble the output with an f-string, embedding the name and the average in braces.' },
+            { zh: 'Student 里存 self.name 和 self.scores；average 返回 round(sum(self.scores) / len(self.scores), 2)；最后 print(f"{s.name}: {s.average()}")，输出 Alice: 87.67（冒号后有空格）。', en: 'Store self.name and self.scores in Student; average returns round(sum(self.scores) / len(self.scores), 2); finish with print(f"{s.name}: {s.average()}") — the output is Alice: 87.67 (space after the colon).' },
           ],
           solution: 'class Student:\n    def __init__(self, name, scores):\n        self.name = name\n        self.scores = scores\n\n    def average(self):\n        return round(sum(self.scores) / len(self.scores), 2)\n\n\ns = Student("Alice", [90, 85, 88])\nprint(f"{s.name}: {s.average()}")\n',
         },
@@ -3081,18 +2901,9 @@ That completes all 11 lessons of this Python introduction — go build a little 
           starter: '# 练习 1：写入并读回\n# 提示：写完记得换行符会影响行数统计\n\n',
           expectedOutput: 'Hello File\nlines: 1\n',
           hints: [
-            {
-              zh: '【思路】分两步：先用 "w" 模式写入，再重新打开读回；想想读回之后怎么数出行数。',
-              en: 'Think in two steps: write with mode "w", then reopen and read back — and how do you count the lines afterwards?',
-            },
-            {
-              zh: '【语法】`with open("test.txt", "w") as f: f.write(...)`；读回用 `f.read()`；数行数用 `len(content.splitlines())`。',
-              en: 'Write with `with open("test.txt", "w") as f: f.write(...)`; read back with `f.read()`; count with `len(content.splitlines())`.',
-            },
-            {
-              zh: '【步骤】写入 "Hello File"（结尾不要加 \\n，否则会算成 2 行）；重新打开 read() 后 print(content)，再 print(f"lines: {len(content.splitlines())}")。',
-              en: 'Write "Hello File" (no trailing \\n, or it counts as 2 lines); after reading back, print(content) then print(f"lines: {len(content.splitlines())}").',
-            },
+            { zh: '任务分两个阶段：先用覆盖写的模式把一句话存进文件，再重新打开把它读回来，最后还要数出行数。想想「行数」由什么决定——句尾要不要留换行符？', en: 'The task has two phases: first write one sentence into the file in overwrite mode, then reopen and read it back, and finally count the lines. What determines the "line count" — should the sentence end with a newline or not?' },
+            { zh: '写入骨架：with open(文件名, "w") as f:，在缩进块里用 f.write(内容)；读回改用只读方式打开，配 f.read()；数行数用 len(内容.splitlines())。', en: 'Write skeleton: with open(filename, "w") as f: and f.write(content) inside the indented block; reopen in read mode and use f.read(); count lines with len(content.splitlines()).' },
+            { zh: '写入 "Hello File"（结尾不要加 \\n，否则会数成 2 行）；重新打开读回后 print(content)，再 print(f"lines: {len(content.splitlines())}")。', en: 'Write "Hello File" with no trailing \\n (otherwise it counts as 2 lines); read it back, print(content), then print(f"lines: {len(content.splitlines())}").' },
           ],
           solution: 'with open("test.txt", "w") as f:\n    f.write("Hello File")\n\nwith open("test.txt") as f:\n    content = f.read()\n\nprint(content)\nprint(f"lines: {len(content.splitlines())}")\n',
         },
@@ -3106,18 +2917,9 @@ That completes all 11 lessons of this Python introduction — go build a little 
           starter: '# 练习 2：行数与字符数\nfruits = ["apple", "banana", "cherry"]\n# 写入 → 读回 → 统计\n\n',
           expectedOutput: '3\n17\n',
           hints: [
-            {
-              zh: '【思路】两个量分别怎么统计：行数就是行列表的长度；字符数就是把每行的长度加起来。',
-              en: 'Think: the line count is just the length of the line list; the character total is the sum of each line length.',
-            },
-            {
-              zh: '【语法】写入时每行补 `\\n`；读回用 `read().splitlines()` 得到不带换行的行列表；求和用 `sum(len(line) for line in lines)`。',
-              en: 'Append `\\n` to each written line; read back with `read().splitlines()` for newline-free lines; total with `sum(len(line) for line in lines)`.',
-            },
-            {
-              zh: '【步骤】循环写入 fruit + "\\n"；读回 splitlines 后 print(len(lines)) 和 print(sum(len(line) for line in lines))，得到 3 和 17。',
-              en: 'Loop writing fruit + "\\n"; after splitlines, print(len(lines)) and print(sum(len(line) for line in lines)) — 3 and 17.',
-            },
+            { zh: '两个量分开想：行数就是「行列表」的长度；字符数就是把每一行的长度加在一起。想想写入时每行末尾要补什么？读回时怎么得到不带换行符的行列表？', en: 'Think about the two quantities separately: the line count is the length of the line list, and the character total is the sum of every line length. What must you append to each written line, and how do you read back a list of lines without the newlines?' },
+            { zh: '写入时每行末尾补一个 \\n；读回用 f.read().splitlines() 得到不带换行的行列表；字符总数把每行的长度累加起来（sum 配合生成式，或写一个循环累加）。', en: 'Append a \\n to every written line; read back with f.read().splitlines() for a newline-free line list; total the characters by summing each line length (sum with a generator expression, or an accumulating loop).' },
+            { zh: '循环写入 fruit + "\\n"；读回 splitlines 后 print(len(lines)) 和 print(sum(len(line) for line in lines))，输出 3 和 17。', en: 'Loop writing fruit + "\\n"; after splitlines, print(len(lines)) and print(sum(len(line) for line in lines)) — the outputs are 3 and 17.' },
           ],
           solution: 'fruits = ["apple", "banana", "cherry"]\nwith open("fruits.txt", "w") as f:\n    for fruit in fruits:\n        f.write(fruit + "\\n")\n\nwith open("fruits.txt") as f:\n    lines = f.read().splitlines()\n\nprint(len(lines))\nprint(sum(len(line) for line in lines))\n',
         },
