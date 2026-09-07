@@ -33,6 +33,9 @@ export default {
   'editor.running': 'Running…',
   'editor.reset': 'Reset',
   'editor.resetConfirm': 'Reset to starter code? Your current draft will be discarded.',
+  'editor.resetTitle': 'Reset Confirmation',
+  'editor.resetOk': 'Reset',
+  'editor.resetCancel': 'Cancel',
   'editor.draftSaved': '· Draft auto-saved',
 
   'runner.compileError': 'Compile error',

@@ -33,6 +33,9 @@ export default {
   'editor.running': '运行中…',
   'editor.reset': '重置',
   'editor.resetConfirm': '确定要重置为初始代码吗？当前代码草稿将被清除。',
+  'editor.resetTitle': '重置确认',
+  'editor.resetOk': '重置',
+  'editor.resetCancel': '取消',
   'editor.draftSaved': '· 草稿自动保存',
 
   'runner.compileError': '编译错误',

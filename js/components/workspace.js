@@ -69,10 +69,12 @@ export function createWorkspace(mount, opts) {
   }
 
   function reset() {
-    if (!window.confirm(t('editor.resetConfirm'))) return;
-    ed.setValue(opts.code || '');
-    clearPanels();
-    if (exercise) draftClear(langId, topicId, exercise.id);
+    confirmDialog(t('editor.resetConfirm')).then((ok) => {
+      if (!ok) return;
+      ed.setValue(opts.code || '');
+      clearPanels();
+      if (exercise) draftClear(langId, topicId, exercise.id);
+    });
   }
   resetBtn.addEventListener('click', reset);
 
@@ -217,4 +219,47 @@ export function createWorkspace(mount, opts) {
     // 容器从 display:none 变为可见后调用，让 CodeMirror 重新测量布局（修复行号栏/代码重叠）
     refresh: () => { try { ed.refresh(); } catch (e) { /* ignore */ } },
   };
+}
+
+/**
+ * 自绘确认对话框，替代 window.confirm。
+ * 原因：站点在沙箱 iframe（如 GitHub Pages 预览面板，缺 allow-modals）里运行时，
+ * 原生 confirm/alert 会被浏览器直接忽略并返回 false，导致“点了没反应”。
+ * 该实现基于 DOM，任何环境下都能正常展示并返回 Promise<boolean>。
+ * @param {string} message 提示文本
+ * @returns {Promise<boolean>}
+ */
+function confirmDialog(message) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal-box" role="dialog" aria-modal="true">
+        <div class="modal-title">${t('editor.resetTitle')}</div>
+        <div class="modal-msg">${escapeText(message)}</div>
+        <div class="modal-actions">
+          <button class="btn" data-act="cancel">${t('editor.resetCancel')}</button>
+          <button class="btn btn-primary" data-act="ok">${t('editor.resetOk')}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) { close(false); return; }
+      const act = e.target.closest('[data-act]') && e.target.closest('[data-act]').dataset.act;
+      if (act === 'ok') close(true);
+      else if (act === 'cancel') close(false);
+    });
+    function close(val) {
+      overlay.remove();
+      resolve(val);
+    }
+    // Esc 关闭
+    const onKey = (e) => { if (e.key === 'Escape') { document.removeEventListener('keydown', onKey, true); close(false); } };
+    document.addEventListener('keydown', onKey, true);
+    overlay.querySelector('[data-act="ok"]').focus();
+  });
+}
+
+function escapeText(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
