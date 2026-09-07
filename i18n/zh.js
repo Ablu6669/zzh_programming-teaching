@@ -1,0 +1,58 @@
+// zh.js — UI 文案（简体中文）。键集合必须与 en.js 完全一致。
+export default {
+  'nav.appName': '编程语言学习工作台',
+  'nav.home': '首页',
+  'nav.notFound': '页面不存在',
+
+  'footer.note': '纯前端静态站 · 代码在线执行由公共 API 提供',
+  'footer.progressLocal': '学习进度保存在本地浏览器',
+
+  'home.title': '选择一门语言开始',
+  'home.subtitle': 'Java · C · C++ · Python —— 讲解 + 实战训练，写完代码直接在线运行',
+  'home.topicsUnit': '个知识点',
+  'home.exercisesUnit': '道实战题',
+
+  'roadmap.title': '学习路线',
+  'roadmap.exercisesUnit': '题已通过',
+  'roadmap.difficulty': '难度',
+
+  'topic.entryNote': '运行须知',
+  'topic.tabLecture': '讲解',
+  'topic.tabExercise': '实战',
+  'topic.tabPlayground': '演练场',
+  'topic.examples': '示例代码',
+  'topic.loadToPlayground': '载入演练场',
+
+  'exercise.tag': '练习',
+  'exercise.showHint': '显示提示',
+  'exercise.hideHint': '收起提示',
+  'exercise.expectedOutput': '期望输出',
+
+  'editor.run': '运行',
+  'editor.runAndJudge': '运行并判定',
+  'editor.running': '运行中…',
+  'editor.reset': '重置',
+  'editor.resetConfirm': '确定要重置为初始代码吗？当前代码草稿将被清除。',
+  'editor.draftSaved': '· 草稿自动保存',
+
+  'runner.compileError': '编译错误',
+  'runner.runtimeError': '运行时错误',
+  'runner.noOutput': '（无输出）',
+  'runner.timeoutError': '运行超时',
+  'runner.timeoutHint': '程序超时被终止。请检查是否存在死循环，或算法复杂度过高。',
+  'runner.rateLimit': '请求过于频繁',
+  'runner.networkError': '无法连接代码执行服务',
+  'runner.queueFull': '请求队列已满，请稍候再试',
+  'runner.runtimeUnavailable': '该语言运行环境暂时不可用',
+  'runner.localRunGuide': '你可以把代码复制到本地环境运行：',
+
+  'judge.passed': '通过！',
+  'judge.failed': '未通过',
+  'judge.expected': '期望输出',
+  'judge.actual': '实际输出',
+  'judge.note': '注：比对时忽略行尾空格与末尾空行，行内前导空格需完全一致。',
+  'judge.compileFailed': '程序未能通过编译，请先修复上方编译错误。',
+  'judge.javaClassName': 'Java 要求入口类名必须为 Main（public class Main），请检查类名。',
+  'judge.missingLine': '此行缺失',
+  'judge.extraLine': '多余输出',
+};

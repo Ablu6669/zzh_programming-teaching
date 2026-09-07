@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Java / C / C++ / Python 交互式学习工作台 — 讲解 + 在线实战训练">
+  <title>编程语言学习工作台 · Polyglot Lab</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="vendor/codemirror/codemirror.min.css">
+  <link rel="stylesheet" href="vendor/codemirror/dracula.min.css">
+  <link rel="stylesheet" href="style.css?v=20260907">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/">
+      <span class="brand-icon" aria-hidden="true">⌨</span>
+      <span class="brand-name" data-i18n="nav.appName">编程语言学习工作台</span>
+    </a>
+    <nav class="topbar-actions">
+      <button id="btn-lang" class="icon-btn" title="中文 / EN" aria-label="language">文A</button>
+      <button id="btn-theme" class="icon-btn" title="Theme" aria-label="theme">◐</button>
+    </nav>
+  </header>
+
+  <main id="app" class="app"></main>
+
+  <footer class="footer">
+    <span data-i18n="footer.note">纯前端静态站 · 代码在线执行由公共 API 提供</span>
+    <span class="footer-sep">·</span>
+    <span data-i18n="footer.progressLocal">学习进度保存在本地浏览器</span>
+  </footer>
+
+  <!-- CodeMirror 5 vendored（加载失败自动降级为 textarea） -->
+  <script src="vendor/codemirror/codemirror.min.js"></script>
+  <script src="vendor/codemirror/clike.min.js"></script>
+  <script src="vendor/codemirror/python.min.js"></script>
+
+  <script type="module" src="js/main.js?v=20260907"></script>
+</body>
+</html>
