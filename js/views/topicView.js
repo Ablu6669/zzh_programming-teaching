@@ -102,29 +102,46 @@ export function renderTopic(app, langId, topicId, exId) {
     card.className = 'ex-card';
     card.id = 'ex-' + ex.id;
     const passed = progressGet(langId, topicId, ex.id);
+    // 分级提示：新版 hints 数组，兼容旧版单个 hint 字段
+    const hints = (ex.hints && ex.hints.length) ? ex.hints : (ex.hint ? [ex.hint] : []);
     card.innerHTML = `
       <div class="ex-head">
         <h3 class="ex-title">
           <span class="ex-tag">${passed ? '✅' : '⑉'}${t('exercise.tag')} ${i + 1}</span>${pick(ex.title)}
         </h3>
         <div class="ex-prompt">${renderMarkdown(pick(ex.prompt))}</div>
-        ${ex.hint ? `<div class="hint-wrap">
-          <button class="hint-btn">💡 ${t('exercise.showHint')}</button>
-          <div class="hint-body" style="display:none">${renderMarkdown(pick(ex.hint))}</div>
+        ${hints.length ? `<div class="hint-wrap">
+          <div class="hint-btns">${hints.map((_, j) => `<button class="hint-btn" data-lvl="${j}">💡 ${t('exercise.hintLevel', { n: j + 1 })}</button>`).join('')}</div>
+          <div class="hint-body" style="display:none"></div>
         </div>` : ''}
         ${ex.expectedOutput !== undefined ? `<div class="ex-prompt" style="margin-top:10px"><strong>${t('exercise.expectedOutput')}:</strong><pre><code>${escapeHtml(ex.expectedOutput)}</code></pre></div>` : ''}
       </div>
       <div class="workspace-mount"></div>
     `;
-    const hintBtn = card.querySelector('.hint-btn');
-    if (hintBtn) {
-      hintBtn.addEventListener('click', () => {
-        const body = card.querySelector('.hint-body');
-        const showing = body.style.display !== 'none';
-        body.style.display = showing ? 'none' : '';
-        hintBtn.textContent = showing ? '💡 ' + t('exercise.showHint') : '💡 ' + t('exercise.hideHint');
+    // 分级提示：点一级、显示一级（从浅到深逐步引导）
+    const hintBody = card.querySelector('.hint-body');
+    const revealed = new Set();
+    card.querySelectorAll('.hint-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('locked')) return;
+        const lvl = parseInt(btn.dataset.lvl, 10);
+        if (revealed.has(lvl)) return;
+        revealed.add(lvl);
+        const item = document.createElement('div');
+        item.className = 'hint-item';
+        item.innerHTML = `<div class="hint-lv">💡 ${t('exercise.hintLevel', { n: lvl + 1 })}</div><div class="hint-txt">${renderMarkdown(pick(hints[lvl]))}</div>`;
+        hintBody.appendChild(item);
+        hintBody.style.display = '';
+        btn.classList.add('revealed');
+        // 逐级引导：看完第 n 级才解锁第 n+1 级
+        const nextBtn = card.querySelector(`.hint-btn[data-lvl="${lvl + 1}"]`);
+        if (nextBtn) nextBtn.classList.remove('locked');
       });
-    }
+    });
+    // 初始只允许点第 1 级
+    card.querySelectorAll('.hint-btn').forEach((b, j) => { if (j > 0) b.classList.add('locked'); });
+    const firstBtn = card.querySelector('.hint-btn[data-lvl="0"]');
+    if (firstBtn) firstBtn.classList.add('enabled');
     const mount = card.querySelector('.workspace-mount');
     const draft = draftGet(langId, topicId, ex.id);
     const ws = createWorkspace(mount, {

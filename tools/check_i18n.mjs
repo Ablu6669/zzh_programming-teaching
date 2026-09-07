@@ -64,8 +64,17 @@ for (const lang of langIds) {
     for (const k of ks) walk(node[k], path ? path + '.' + k : k);
   };
   walk(def, '');
+  // 每道题必须有分级提示 hints（兼容旧版单个 hint）
+  let hintCount = 0;
+  for (const topic of def.topics) {
+    for (const ex of topic.exercises) {
+      if (Array.isArray(ex.hints) && ex.hints.length >= 1) hintCount++;
+      else if (ex.hint && typeof ex.hint === 'object') hintCount++; // 旧版字段
+      else err(`${lang}.js ${topic.id}/${ex.id}: 缺少 hints 数组（分级提示）`);
+    }
+  }
   console.log(`  ${lang}.js: ${pairs} 个双语对, ${bad} 个异常, ${def.topics.length} 个知识点, ` +
-    `${def.topics.reduce((s, t) => s + t.exercises.length, 0)} 道题`);
+    `${def.topics.reduce((s, t) => s + t.exercises.length, 0)} 道题, ${hintCount} 题有分级提示`);
 }
 
 console.log(errors === 0 ? '\n✅ i18n 校验全部通过' : `\n❌ 共 ${errors} 处问题`);

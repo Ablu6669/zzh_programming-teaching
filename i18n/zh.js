@@ -24,8 +24,7 @@ export default {
   'topic.loadToPlayground': '载入演练场',
 
   'exercise.tag': '练习',
-  'exercise.showHint': '显示提示',
-  'exercise.hideHint': '收起提示',
+  'exercise.hintLevel': '提示 {n}',
   'exercise.expectedOutput': '期望输出',
 
   'editor.run': '运行',
@@ -58,4 +57,10 @@ export default {
   'judge.javaClassName': 'Java 要求入口类名必须为 Main（public class Main），请检查类名。',
   'judge.missingLine': '此行缺失',
   'judge.extraLine': '多余输出',
+  'judge.errorAt': '出错位置',
+  'judge.lineNum': '第 {n} 行',
+  'judge.possibleCause': '可能原因',
+  'judge.stuck': '已经连续几次未通过了。建议展开题目下方的「提示」，从提示 1 开始一步步来。',
+  'judge.runtimeCrashed': '程序运行时出错（崩溃）',
+  'judge.runtimeNote': '程序没有打印出完整结果就中断了。完整报错信息在上方输出面板的 stderr 标签里。',
 };

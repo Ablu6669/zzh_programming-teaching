@@ -196,8 +196,36 @@ button { font-family: inherit; }
 .ex-prompt pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; overflow-x: auto; }
 .ex-prompt pre code { background: none; padding: 0; }
 .hint-wrap { margin: 10px 0 0; }
-.hint-btn { background: none; border: none; color: var(--warn); cursor: pointer; font-size: 13px; padding: 0; }
-.hint-body { margin-top: 8px; padding: 10px 14px; background: rgba(241, 250, 140, .06); border-left: 3px solid var(--warn); border-radius: 0 8px 8px 0; color: var(--fg-dim); font-size: 13.5px; }
+.hint-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.hint-btn {
+  background: none; border: 1px solid rgba(241, 250, 140, .35); border-radius: 999px;
+  color: var(--warn); cursor: pointer; font-size: 12.5px; padding: 4px 14px; font-weight: 600;
+}
+.hint-btn:hover { border-color: var(--warn); }
+.hint-btn.locked { opacity: .35; cursor: not-allowed; border-style: dashed; }
+.hint-btn.locked:hover { border-color: rgba(241, 250, 140, .35); }
+.hint-btn.revealed { opacity: .55; }
+.hint-body { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+.hint-item {
+  padding: 10px 14px; background: rgba(241, 250, 140, .06); border-left: 3px solid var(--warn);
+  border-radius: 0 8px 8px 0; color: var(--fg-dim); font-size: 13.5px;
+}
+.hint-item .hint-lv { color: var(--warn); font-weight: 700; font-size: 12px; margin-bottom: 4px; letter-spacing: .3px; }
+.hint-item .hint-txt code { background: var(--bg-code); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; color: var(--accent); }
+
+/* 判题诊断块：出错位置 + 通俗解释 */
+.judge-diag {
+  margin: 12px 0 2px; padding: 12px 16px; border-radius: 10px;
+  background: rgba(255, 176, 66, .07); border: 1px solid rgba(255, 176, 66, .35);
+  font-size: 13.5px; color: var(--fg-dim); display: flex; flex-direction: column; gap: 6px;
+}
+.judge-diag .jd-row { line-height: 1.7; }
+.judge-diag .jd-row strong { color: var(--warn); }
+.judge-diag code { background: var(--bg-code); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; color: var(--accent); }
+.judge-stuck {
+  margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13px;
+  background: rgba(241, 250, 140, .07); border: 1px dashed rgba(241, 250, 140, .5); color: var(--warn);
+}
 
 /* 工作区：编辑器 + 输出 */
 .workspace { padding: 16px 22px 22px; }

@@ -3,6 +3,7 @@ import { t, pick } from '../i18n.js';
 import { createEditor } from './editor.js';
 import { runCode, isJavaClassNameError } from '../runner/godbolt.js';
 import { judge } from '../judge.js';
+import { diagnoseCompile, diagnoseRuntime, diagnoseMismatch } from '../diagnose.js';
 import { draftSet, draftClear } from '../progress.js';
 
 /**
@@ -45,6 +46,8 @@ export function createWorkspace(mount, opts) {
 
   const ed = createEditor(editorBox, langId, code);
   ed.onChange(onCodeChange);
+
+  let failCount = 0; // 本会话连续判定失败次数（通过后清零），≥2 时引导看提示
 
   let draftTimer = null;
   function onCodeChange(v) {
@@ -117,7 +120,25 @@ export function createWorkspace(mount, opts) {
   }
 
   // ---- 判题结果 ----
-  function renderJudge(jr) {
+  /** 诊断块：出错位置 + 通俗解释（给零基础用户） */
+  function renderDiagHTML(diag) {
+    if (!diag || (!diag.line && !diag.explanation)) return '';
+    let html = '<div class="judge-diag">';
+    if (diag.line) html += `<div class="jd-row">📍 <strong>${t('judge.errorAt')}</strong>：${t('judge.lineNum', { n: diag.line })}</div>`;
+    if (diag.explanation) html += `<div class="jd-row">💡 <strong>${t('judge.possibleCause')}</strong>：${mdInline(diag.explanation)}</div>`;
+    html += '</div>';
+    return html;
+  }
+
+  /** 连续失败时的引导提示（指向题目下方的分级提示） */
+  function stuckTipHTML() {
+    if (failCount < 2 || !exercise) return '';
+    const hints = (exercise.hints && exercise.hints.length) ? exercise.hints : (exercise.hint ? [exercise.hint] : []);
+    if (!hints.length) return '';
+    return `<div class="judge-stuck">💡 ${t('judge.stuck')}</div>`;
+  }
+
+  function renderJudge(jr, mismatchDiag) {
     if (jr.pass) {
       judgeArea.innerHTML = `
         <div class="judge-result pass">
@@ -130,6 +151,7 @@ export function createWorkspace(mount, opts) {
     judgeArea.innerHTML = `
       <div class="judge-result fail">
         <div class="judge-title">❌ ${t('judge.failed')}</div>
+        ${mismatchDiag ? `<div class="judge-diag"><div class="jd-row">🔎 ${mdInline(mismatchDiag)}</div></div>` : ''}
         <div class="diff-grid">
           <div class="diff-col">
             <h4>${t('judge.expected')}</h4>
@@ -141,6 +163,7 @@ export function createWorkspace(mount, opts) {
           </div>
         </div>
         <div class="judge-note">${t('judge.note')}</div>
+        ${stuckTipHTML()}
       </div>`;
   }
 
@@ -177,20 +200,41 @@ export function createWorkspace(mount, opts) {
       setBusy(false);
       renderOutput(result);
       if (doJudge) {
+        // ① 编译失败：定位行号 + 通俗解释
         if (result.kind === 'compile_error') {
-          renderJudge({ pass: false, expected: [], actual: [], lineResults: [] });
+          failCount++;
+          const diag = diagnoseCompile(langId, result.compileStderr);
+          let javaNote = '';
+          if ((langDef.id || langDef.language) === 'java' && isJavaClassNameError(result.compileStderr)) {
+            javaNote = `<div class="judge-note">⚠ ${t('judge.javaClassName')}</div>`;
+          }
           judgeArea.innerHTML = `
             <div class="judge-result fail">
               <div class="judge-title">❌ ${t('judge.failed')}</div>
-              <div class="judge-note">${t('judge.compileFailed')}</div>
+              ${renderDiagHTML(diag)}
+              ${diag ? '' : `<div class="judge-note">${t('judge.compileFailed')}</div>`}
+              ${javaNote}
+              ${stuckTipHTML()}
             </div>`;
-          if ((langDef.id || langDef.language) === 'java' && isJavaClassNameError(result.compileStderr)) {
-            judgeArea.insertAdjacentHTML('beforeend', `<div class="judge-note">⚠ ${t('judge.javaClassName')}</div>`);
-          }
           return;
         }
+        // ② 运行时崩溃（stderr 有内容）：解释为什么崩
+        if (result.stderr && result.stderr.trim()) {
+          failCount++;
+          const diag = diagnoseRuntime(langId, result.stderr);
+          judgeArea.innerHTML = `
+            <div class="judge-result fail">
+              <div class="judge-title">💥 ${t('judge.runtimeCrashed')}</div>
+              ${renderDiagHTML(diag)}
+              <div class="judge-note">${t('judge.runtimeNote')}</div>
+              ${stuckTipHTML()}
+            </div>`;
+          return;
+        }
+        // ③ 输出比对：哪一行不一致、差在哪
         const jr = judge(exercise.expectedOutput, result.stdout);
-        renderJudge(jr);
+        if (jr.pass) failCount = 0; else failCount++;
+        renderJudge(jr, jr.pass ? null : diagnoseMismatch(jr));
         if (jr.pass && opts.onPass) opts.onPass();
       }
     }).catch((err) => {
@@ -211,6 +255,13 @@ export function createWorkspace(mount, opts) {
 
   function escapeHtml(s) {
     return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /** 诊断文本轻量渲染：先转义，再把 \`xxx\` 变成 <code>、\*\*x\*\* 变成 <strong> */
+  function mdInline(s) {
+    return escapeHtml(s)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   }
 
   return {

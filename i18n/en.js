@@ -24,8 +24,7 @@ export default {
   'topic.loadToPlayground': 'Load into playground',
 
   'exercise.tag': 'Exercise',
-  'exercise.showHint': 'Show hint',
-  'exercise.hideHint': 'Hide hint',
+  'exercise.hintLevel': 'Hint {n}',
   'exercise.expectedOutput': 'Expected output',
 
   'editor.run': 'Run',
@@ -58,4 +57,10 @@ export default {
   'judge.javaClassName': 'Java requires the entry class to be named Main (public class Main). Check your class name.',
   'judge.missingLine': 'missing',
   'judge.extraLine': 'extra output',
+  'judge.errorAt': 'Error location',
+  'judge.lineNum': 'line {n}',
+  'judge.possibleCause': 'Likely cause',
+  'judge.stuck': 'Several attempts failed in a row. Open the hints below the exercise and follow them step by step, starting with Hint 1.',
+  'judge.runtimeCrashed': 'The program crashed at runtime',
+  'judge.runtimeNote': 'The program stopped before printing the full result. The full error message is in the stderr tab of the output panel above.',
 };
