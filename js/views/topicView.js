@@ -22,6 +22,7 @@ export function renderTopic(app, langId, topicId, exId) {
   }
 
   const passedCount = topic.exercises.filter((ex) => progressGet(langId, topicId, ex.id)).length;
+  const wsList = []; // 本页所有工作区，tab 由隐藏变可见后统一 refresh（修复 CodeMirror 布局重叠）
   const stars = '★'.repeat(topic.difficulty || 1);
   const idx = def.topics.findIndex((tp) => tp.id === topicId);
   const prev = idx > 0 ? def.topics[idx - 1] : null;
@@ -70,6 +71,8 @@ export function renderTopic(app, langId, topicId, exId) {
   function switchTab(name) {
     app.querySelectorAll('.tab-btn').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
     app.querySelectorAll('.tab-panel').forEach((p) => { p.style.display = p.dataset.panel === name ? '' : 'none'; });
+    // 面板由隐藏变可见后，CodeMirror 需重新测量布局（否则行号栏/代码重叠或空白）
+    setTimeout(() => wsList.forEach((ws) => { try { ws.refresh(); } catch (e) { /* ignore */ } }), 0);
   }
 
   // ---- 讲解 tab：示例代码 ----
@@ -138,6 +141,7 @@ export function renderTopic(app, langId, topicId, exId) {
       },
     });
     cleanups.push(ws.destroy);
+    wsList.push(ws);
     exSection.appendChild(card);
   });
 
@@ -151,6 +155,7 @@ export function renderTopic(app, langId, topicId, exId) {
     code: (topic.examples && topic.examples[0] ? topic.examples[0].code : exStarter(def)),
   });
   cleanups.push(pgWs.destroy);
+  wsList.push(pgWs);
 
   // 直达某题
   if (exId) {

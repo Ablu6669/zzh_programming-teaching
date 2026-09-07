@@ -37,6 +37,9 @@ export function createEditor(container, langId, value) {
         onChange: (fn) => cm.on('change', fn),
         destroy: () => { if (cm.display && cm.display.wrapper && cm.display.wrapper.parentNode) cm.display.wrapper.parentNode.removeChild(cm.display.wrapper); },
         refreshTheme: () => cm.setOption('theme', currentTheme()),
+        // CodeMirror 在隐藏容器(如未显示的 tab)里创建时，行号栏宽度/正文左边距会按 0 测量而错误。
+        // 容器变为可见后调用 refresh() 强制重新测量布局。
+        refresh: () => { try { cm.refresh(); } catch (e) { /* ignore */ } },
       };
       return api;
     } catch (e) {
@@ -60,6 +63,7 @@ export function createEditor(container, langId, value) {
     onChange: (fn) => handlers.push(fn),
     destroy: () => { ta.remove(); },
     refreshTheme: () => {},
+    refresh: () => {},
   };
 }
 

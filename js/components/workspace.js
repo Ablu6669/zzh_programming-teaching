@@ -214,5 +214,7 @@ export function createWorkspace(mount, opts) {
   return {
     destroy: () => { clearTimeout(draftTimer); ed.destroy(); },
     setCode: (v) => ed.setValue(v),
+    // 容器从 display:none 变为可见后调用，让 CodeMirror 重新测量布局（修复行号栏/代码重叠）
+    refresh: () => { try { ed.refresh(); } catch (e) { /* ignore */ } },
   };
 }
