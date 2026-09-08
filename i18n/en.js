@@ -36,6 +36,12 @@ export default {
   'editor.resetOk': 'Reset',
   'editor.resetCancel': 'Cancel',
   'editor.draftSaved': '· Draft auto-saved',
+  'editor.trialToggle': 'Trial Run',
+  'editor.trialTitle': 'Custom Input',
+  'editor.trialNote': 'Simulates the program reading from stdin (not scored, for debugging only)',
+  'editor.trialPlaceholder': 'Type the input the program should read here, one line each…',
+  'editor.trialRun': 'Run',
+  'editor.trialResult': 'Trial run (not scored)',
 
   'runner.compileError': 'Compile error',
   'runner.runtimeError': 'Runtime error',
@@ -63,4 +69,8 @@ export default {
   'judge.stuck': 'Several attempts failed in a row. Open the hints below the exercise and follow them step by step, starting with Hint 1.',
   'judge.runtimeCrashed': 'The program crashed at runtime',
   'judge.runtimeNote': 'The program stopped before printing the full result. The full error message is in the stderr tab of the output panel above.',
+  'judge.allCasesPass': 'All {n} cases passed',
+  'judge.caseLabel': 'Case {n}',
+  'judge.casesFail': 'Case {n} did not pass',
+  'judge.compileError': 'Compilation failed',
 };

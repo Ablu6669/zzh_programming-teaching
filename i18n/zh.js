@@ -36,6 +36,12 @@ export default {
   'editor.resetOk': '重置',
   'editor.resetCancel': '取消',
   'editor.draftSaved': '· 草稿自动保存',
+  'editor.trialToggle': '试跑',
+  'editor.trialTitle': '自定义输入',
+  'editor.trialNote': '模拟程序从键盘读取输入（不计分，仅调试用）',
+  'editor.trialPlaceholder': '在此输入程序运行时要读取的内容，每行一段…',
+  'editor.trialRun': '运行',
+  'editor.trialResult': '试跑结果（不计分）',
 
   'runner.compileError': '编译错误',
   'runner.runtimeError': '运行时错误',
@@ -63,4 +69,8 @@ export default {
   'judge.stuck': '已经连续几次未通过了。建议展开题目下方的「提示」，从提示 1 开始一步步来。',
   'judge.runtimeCrashed': '程序运行时出错（崩溃）',
   'judge.runtimeNote': '程序没有打印出完整结果就中断了。完整报错信息在上方输出面板的 stderr 标签里。',
+  'judge.allCasesPass': '全部 {n} 个用例均通过',
+  'judge.caseLabel': '用例 {n}',
+  'judge.casesFail': '第 {n} 个用例未通过',
+  'judge.compileError': '编译失败',
 };

@@ -49,12 +49,13 @@ function prepareJava(code) {
  * 执行代码。
  * @param {{id, engine}} langDef 语言定义
  * @param {string} code 源代码
+ * @param {{stdin?: string}} [opts] 可选执行参数（自定义标准输入，供"试跑"与多用例判定使用）
  * @returns {Promise<object>} 归一化结果：
  *   { ok, kind: 'success'|'compile_error'|'runtime_error',
  *     stdout, stderr, compileStderr, exitCode, raw }
  *   失败时 reject：{ code: 'TIMEOUT'|'RATE_LIMIT'|'NETWORK'|'QUEUE_FULL', message }
  */
-export function runCode(langDef, code) {
+export function runCode(langDef, code, opts) {
   const langId = langDef.id || langDef.language;
   const compiler = (langDef.engine && langDef.engine.compiler) || COMPILERS[langId];
   if (!compiler) {
@@ -62,8 +63,10 @@ export function runCode(langDef, code) {
   }
   const isJava = langId === 'java';
   const source = isJava ? prepareJava(code) : code;
+  const stdin = (opts && opts.stdin != null) ? String(opts.stdin) : '';
 
-  const cacheKey = hashStr(compiler + '|' + source);
+  // 缓存键必须包含 stdin：同一份代码喂不同输入会产生不同输出
+  const cacheKey = hashStr(compiler + '|' + source + '|<<' + stdin);
   const hit = cache.get(cacheKey);
   if (hit && Date.now() - hit.time < CACHE_TTL) {
     return Promise.resolve(hit.result);
@@ -73,7 +76,7 @@ export function runCode(langDef, code) {
     source,
     options: {
       userArguments: '',
-      executeParameters: { args: [], stdin: '' },
+      executeParameters: { args: [], stdin },
       compilerOptions: { executorRequest: true },
       filters: { execute: true },
       tools: [],

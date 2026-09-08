@@ -1,4 +1,5 @@
 // workspace.js — 单个工作区：编辑器 + 运行/判定按钮 + 输出面板 + 判题结果
+// 批 1 新增：① 自定义输入"试跑"（🧪 不计分）；② 多用例判题（exercise.tests 存在时逐用例跑并渲染 ✅/❌ 网格）
 import { t, pick } from '../i18n.js';
 import { createEditor } from './editor.js';
 import { runCode, isJavaClassNameError } from '../runner/godbolt.js';
@@ -10,7 +11,7 @@ import { draftSet, draftClear } from '../progress.js';
  * 创建工作区
  * @param {HTMLElement} mount 挂载点
  * @param {object} opts { langDef, code, langId, topicId, exercise(可空: 演练场模式), onPass }
- * @returns {{ destroy, setCode }}
+ * @returns {{ destroy, setCode, refresh }}
  */
 export function createWorkspace(mount, opts) {
   const { langDef, langId, topicId, exercise } = opts;
@@ -26,7 +27,16 @@ export function createWorkspace(mount, opts) {
       <button class="btn btn-primary btn-run"><span class="btn-ico">▶</span> <span class="btn-txt">${t('editor.run')}</span></button>
       ${exercise ? `<button class="btn btn-judge btn-run-judge"><span class="btn-ico">✓</span> <span class="btn-txt">${t('editor.runAndJudge')}</span></button>` : ''}
       <button class="btn btn-reset"><span class="btn-ico">↺</span> <span class="btn-txt">${t('editor.reset')}</span></button>
+      <button class="btn btn-trial"><span class="btn-ico">🧪</span> <span class="btn-txt">${t('editor.trialToggle')}</span></button>
       <span class="ws-draft">${t('editor.draftSaved')}</span>
+    </div>
+    <div class="trial-box" hidden>
+      <div class="trial-head">
+        <span class="trial-title">🧪 ${t('editor.trialTitle')}</span>
+        <span class="trial-note">${t('editor.trialNote')}</span>
+      </div>
+      <textarea class="trial-stdin" rows="2" spellcheck="false" placeholder="${t('editor.trialPlaceholder')}"></textarea>
+      <button class="btn btn-trial-run"><span class="btn-ico">▶</span> <span class="btn-txt">${t('editor.trialRun')}</span></button>
     </div>
     <div class="editor-box"></div>
     <div class="output-area"></div>
@@ -42,6 +52,10 @@ export function createWorkspace(mount, opts) {
   const runBtn = $('.btn-run');
   const judgeBtn = $('.btn-run-judge');
   const resetBtn = $('.btn-reset');
+  const trialBtn = $('.btn-trial');
+  const trialBox = $('.trial-box');
+  const trialStdin = $('.trial-stdin');
+  const trialRunBtn = $('.btn-trial-run');
   const draftLabel = $('.ws-draft');
 
   const ed = createEditor(editorBox, langId, code);
@@ -62,7 +76,7 @@ export function createWorkspace(mount, opts) {
   }
 
   function setBusy(busy) {
-    runBtn.disabled = busy;
+    [runBtn, resetBtn, trialBtn, trialRunBtn].forEach((b) => { if (b) b.disabled = busy; });
     if (judgeBtn) judgeBtn.disabled = busy;
     if (busy) {
       runBtn.innerHTML = '<span class="spinner"></span> <span>' + t('editor.running') + '</span>';
@@ -81,6 +95,30 @@ export function createWorkspace(mount, opts) {
   }
   resetBtn.addEventListener('click', reset);
 
+  // ---- 自定义输入试跑（🧪 不计分）----
+  trialBtn.addEventListener('click', () => {
+    trialBox.hidden = !trialBox.hidden;
+    if (!trialBox.hidden) trialStdin.focus();
+  });
+  function runTrial() {
+    clearPanels();
+    setBusy(true);
+    runCode(langDef, ed.getValue(), { stdin: trialStdin.value })
+      .then((result) => {
+        setBusy(false);
+        renderOutput(result, { trial: true });
+      })
+      .catch((err) => {
+        setBusy(false);
+        renderRunnerError(err);
+      });
+  }
+  trialRunBtn.addEventListener('click', runTrial);
+  trialStdin.addEventListener('keydown', (e) => {
+    // Ctrl/Cmd + Enter 快捷试跑
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runTrial(); }
+  });
+
   function clearPanels() {
     outputArea.innerHTML = '';
     judgeArea.innerHTML = '';
@@ -88,13 +126,16 @@ export function createWorkspace(mount, opts) {
   }
 
   // ---- 输出面板 ----
-  function renderOutput(result) {
+  /** @param {object} result 归一化运行结果
+   *  @param {object} [ext] { trial?: boolean } 试跑模式：面板顶部加"试跑不计分"标记 */
+  function renderOutput(result, ext) {
+    const trial = !!(ext && ext.trial);
     const tabs = [];
     if (result.compileStderr) tabs.push(['compile', t('runner.compileError'), true]);
     if (result.stdout) tabs.push(['stdout', 'stdout', false]);
     if (result.stderr) tabs.push(['stderr', t('runner.runtimeError'), true]);
     if (tabs.length === 0) {
-      outputArea.innerHTML = `<div class="output-panel"><div class="output-body"><span class="output-empty">${t('runner.noOutput')}</span></div></div>`;
+      outputArea.innerHTML = `<div class="output-panel">${trial ? `<div class="output-flag">🧪 ${t('editor.trialResult')}</div>` : ''}<div class="output-body"><span class="output-empty">${t('runner.noOutput')}</span></div></div>`;
       return;
     }
     const bodies = {
@@ -105,6 +146,7 @@ export function createWorkspace(mount, opts) {
     const first = tabs[0][0];
     outputArea.innerHTML = `
       <div class="output-panel">
+        ${trial ? `<div class="output-flag">🧪 ${t('editor.trialResult')}</div>` : ''}
         <div class="output-tabs">${tabs.map(([k, label, err]) =>
           `<button class="output-tab ${k === first ? 'active' : ''} ${err ? 'has-err' : ''}" data-tab="${k}">${label}</button>`).join('')}
         </div>
@@ -138,6 +180,33 @@ export function createWorkspace(mount, opts) {
     return `<div class="judge-stuck">💡 ${t('judge.stuck')}</div>`;
   }
 
+  /** 单个用例的期望 vs 实际 diff 网格 */
+  function diffGridHTML(jr) {
+    const expHtml = jr.expected.map((l) => `<div class="diff-line">${escapeHtml(l) || ' '}</div>`).join('');
+    const actLines = jr.lineResults.map((r) => `<div class="diff-line ${r.ok ? 'ok' : 'bad'}">${escapeHtml(r.actual)}${r.missing ? ' ⚠ ' + t('judge.missingLine') : ''}${r.extra ? ' ⚠ ' + t('judge.extraLine') : ''}</div>`).join('');
+    return `<div class="diff-grid">
+      <div class="diff-col">
+        <h4>${t('judge.expected')}</h4>
+        <pre>${expHtml || '<span class="output-empty">—</span>'}</pre>
+      </div>
+      <div class="diff-col">
+        <h4>${t('judge.actual')}</h4>
+        <pre>${actLines || '<span class="output-empty">—</span>'}</pre>
+      </div>
+    </div>
+    <div class="judge-note">${t('judge.note')}</div>`;
+  }
+
+  // 全部通过
+  function renderPassHTML(caseCount) {
+    return `
+      <div class="judge-result pass">
+        <div class="judge-title">✅ ${t('judge.passed')}</div>
+        ${caseCount > 1 ? `<div class="judge-sub">${t('judge.allCasesPass', { n: caseCount })}</div>` : ''}
+      </div>`;
+  }
+
+  // 单用例判定结果（默认无 tests 的路径，视觉与旧版一致：pass 显示 ✅）
   function renderJudge(jr, mismatchDiag) {
     if (jr.pass) {
       judgeArea.innerHTML = `
@@ -146,23 +215,111 @@ export function createWorkspace(mount, opts) {
         </div>`;
       return;
     }
-    const expHtml = jr.expected.map((l) => `<div class="diff-line">${escapeHtml(l) || ' '}</div>`).join('');
-    const actLines = jr.lineResults.map((r) => `<div class="diff-line ${r.ok ? 'ok' : 'bad'}">${escapeHtml(r.actual)}${r.missing ? ' ⚠ ' + t('judge.missingLine') : ''}${r.extra ? ' ⚠ ' + t('judge.extraLine') : ''}</div>`).join('');
     judgeArea.innerHTML = `
       <div class="judge-result fail">
         <div class="judge-title">❌ ${t('judge.failed')}</div>
         ${mismatchDiag ? `<div class="judge-diag"><div class="jd-row">🔎 ${mdInline(mismatchDiag)}</div></div>` : ''}
-        <div class="diff-grid">
-          <div class="diff-col">
-            <h4>${t('judge.expected')}</h4>
-            <pre>${expHtml || '<span class="output-empty">—</span>'}</pre>
-          </div>
-          <div class="diff-col">
-            <h4>${t('judge.actual')}</h4>
-            <pre>${actLines || '<span class="output-empty">—</span>'}</pre>
-          </div>
-        </div>
-        <div class="judge-note">${t('judge.note')}</div>
+        ${diffGridHTML(jr)}
+        ${stuckTipHTML()}
+      </div>`;
+  }
+
+  // ---- 判题：用例定义 ----
+  /** 题目判定用例：优先 ex.tests（[{in?, out}]），否则退化为单组 expectedOutput */
+  function judgeCases() {
+    if (exercise && Array.isArray(exercise.tests) && exercise.tests.length) {
+      return exercise.tests.map((tc) => ({
+        stdin: tc.in != null ? String(tc.in) : '',
+        out: tc.out,
+        fromTests: true,
+      }));
+    }
+    return [{
+      stdin: '',
+      out: exercise && exercise.expectedOutput !== undefined ? exercise.expectedOutput : '',
+      fromTests: false,
+    }];
+  }
+
+  /** 逐用例渲染状态条（运行中/✅/❌/编译失败/崩溃） */
+  function casesBarHTML(states) {
+    const chips = states.map((s, i) => {
+      const icon = s.status === 'pass' ? '✅' : s.status === 'fail' ? '❌' : s.status === 'run' ? '⏳' : (s.status === 'compile' ? '⚠' : '💥');
+      return `<span class="case-chip ${s.status}" title="${t('judge.caseLabel', { n: i + 1 })}">${t('judge.caseLabel', { n: i + 1 })} ${icon}</span>`;
+    }).join('');
+    return `<div class="judge-cases">${chips}</div>`;
+  }
+
+  /** 多用例判定主流程：编译错误/崩溃中止（代码级问题，其余用例同错），输出不匹配跑完全部再汇总 */
+  async function runJudge() {
+    clearPanels();
+    setBusy(true);
+    const cases = judgeCases();
+    const multi = cases.length > 1;
+    const states = cases.map((c) => ({ ...c, status: 'wait' }));
+
+    // 先渲染进度条，逐用例回填状态
+    if (multi) judgeArea.innerHTML = casesBarHTML(states);
+    let stopKind = null;      // 'compile' | 'crash' | null
+    let diag = null;
+    let firstFailCase = -1;   // 首个输出不匹配的用例下标（用于展开 diff）
+
+    for (let i = 0; i < cases.length && !stopKind; i++) {
+      states[i].status = 'run';
+      if (multi) judgeArea.innerHTML = casesBarHTML(states);
+      let result;
+      try {
+        result = await runCode(langDef, code, { stdin: cases[i].stdin });
+      } catch (err) {
+        setBusy(false);
+        renderRunnerError(err);
+        return;
+      }
+      if (result.kind === 'compile_error') {
+        states[i].status = 'compile'; stopKind = 'compile'; diag = diagnoseCompile(langId, result.compileStderr); states[i].diag = diag;
+      } else if (result.stderr && result.stderr.trim()) {
+        states[i].status = 'crash'; stopKind = 'crash'; diag = diagnoseRuntime(langId, result.stderr); states[i].diag = diag;
+      } else {
+        const jr = judge(cases[i].out, result.stdout);
+        states[i].status = jr.pass ? 'pass' : 'fail';
+        states[i].jr = jr;
+        if (!jr.pass && firstFailCase < 0) { firstFailCase = i; diag = diagnoseMismatch(jr); }
+        // 输出不匹配不中止，继续跑剩余用例，让用户看到全部结果
+      }
+    }
+    setBusy(false);
+
+    const allPass = states.every((s) => s.status === 'pass');
+
+    // ---- 汇总渲染 ----
+    if (allPass) {
+      failCount = 0;
+      judgeArea.innerHTML = (multi ? casesBarHTML(states) : '') + renderPassHTML(cases.length);
+      if (opts.onPass) opts.onPass();
+      return;
+    }
+    failCount++;
+
+    // 多用例汇总：先决性失败（编译/崩溃）展示第一个失败用例的诊断
+    const firstBad = states.find((s) => s.status === 'compile' || s.status === 'crash' || s.status === 'fail');
+    const title = stopKind === 'compile' ? `❌ ${t('judge.failed')} · ${t('judge.compileError')}`
+      : stopKind === 'crash' ? `💥 ${t('judge.failed')} · ${t('judge.runtimeCrashed')}`
+      : `❌ ${t('judge.failed')} · ${firstFailCase >= 0 ? t('judge.casesFail', { n: firstFailCase + 1 }) : ''}`;
+
+    let detail = '';
+    if (firstBad) {
+      if (firstBad.status === 'compile' || firstBad.status === 'crash') {
+        detail = renderDiagHTML(firstBad.diag);
+      } else if (firstBad.jr) {
+        const caseDiag = (firstFailCase >= 0 && states[firstFailCase] === firstBad) ? diag : diagnoseMismatch(firstBad.jr);
+        detail = `${caseDiag ? `<div class="judge-diag"><div class="jd-row">🔎 ${mdInline(caseDiag)}</div></div>` : ''}${diffGridHTML(firstBad.jr)}`;
+      }
+    }
+    judgeArea.innerHTML = `
+      <div class="judge-result fail">
+        <div class="judge-title">${title}</div>
+        ${casesBarHTML(states)}
+        ${detail}
         ${stuckTipHTML()}
       </div>`;
   }
@@ -196,6 +353,17 @@ export function createWorkspace(mount, opts) {
   function execute(doJudge) {
     clearPanels();
     setBusy(true);
+    // 多用例判题：exercise.tests 存在即直接走 runJudge——它内部会逐用例执行
+    // （含编译失败/崩溃判定）。不能在此先 runCode 一次：那会多打一发无输入请求，
+    // 徒增一倍 Godbolt 请求量与失败面，且与 runJudge 的判定逻辑重复。
+    const hasTests = !!(exercise && Array.isArray(exercise.tests) && exercise.tests.length);
+    if (doJudge && hasTests) {
+      runJudge().catch((err) => {
+        setBusy(false);
+        renderRunnerError(err);
+      });
+      return;
+    }
     runCode(langDef, ed.getValue()).then((result) => {
       setBusy(false);
       renderOutput(result);
@@ -231,7 +399,7 @@ export function createWorkspace(mount, opts) {
             </div>`;
           return;
         }
-        // ③ 输出比对：哪一行不一致、差在哪
+        // ③ 单用例（无 tests）：与旧版一致的比对
         const jr = judge(exercise.expectedOutput, result.stdout);
         if (jr.pass) failCount = 0; else failCount++;
         renderJudge(jr, jr.pass ? null : diagnoseMismatch(jr));
@@ -275,7 +443,7 @@ export function createWorkspace(mount, opts) {
 /**
  * 自绘确认对话框，替代 window.confirm。
  * 原因：站点在沙箱 iframe（如 GitHub Pages 预览面板，缺 allow-modals）里运行时，
- * 原生 confirm/alert 会被浏览器直接忽略并返回 false，导致“点了没反应”。
+ * 原生 confirm/alert 会被浏览器直接忽略并返回 false，导致"点了没反应"。
  * 该实现基于 DOM，任何环境下都能正常展示并返回 Promise<boolean>。
  * @param {string} message 提示文本
  * @returns {Promise<boolean>}
