@@ -36,12 +36,6 @@ export default {
   'editor.resetOk': '重置',
   'editor.resetCancel': '取消',
   'editor.draftSaved': '· 草稿自动保存',
-  'editor.trialToggle': '试跑',
-  'editor.trialTitle': '自定义输入',
-  'editor.trialNote': '模拟程序从键盘读取输入（不计分，仅调试用）',
-  'editor.trialPlaceholder': '在此输入程序运行时要读取的内容，每行一段…',
-  'editor.trialRun': '运行',
-  'editor.trialResult': '试跑结果（不计分）',
 
   'runner.compileError': '编译错误',
   'runner.runtimeError': '运行时错误',

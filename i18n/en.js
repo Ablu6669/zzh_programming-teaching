@@ -36,12 +36,6 @@ export default {
   'editor.resetOk': 'Reset',
   'editor.resetCancel': 'Cancel',
   'editor.draftSaved': '· Draft auto-saved',
-  'editor.trialToggle': 'Trial Run',
-  'editor.trialTitle': 'Custom Input',
-  'editor.trialNote': 'Simulates the program reading from stdin (not scored, for debugging only)',
-  'editor.trialPlaceholder': 'Type the input the program should read here, one line each…',
-  'editor.trialRun': 'Run',
-  'editor.trialResult': 'Trial run (not scored)',
 
   'runner.compileError': 'Compile error',
   'runner.runtimeError': 'Runtime error',

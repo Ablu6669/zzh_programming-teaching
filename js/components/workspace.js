@@ -1,5 +1,5 @@
 // workspace.js — 单个工作区：编辑器 + 运行/判定按钮 + 输出面板 + 判题结果
-// 批 1 新增：① 自定义输入"试跑"（🧪 不计分）；② 多用例判题（exercise.tests 存在时逐用例跑并渲染 ✅/❌ 网格）
+// 批 1 新增：多用例判题（exercise.tests 存在时逐用例跑并渲染 ✅/❌ 网格）
 import { t, pick } from '../i18n.js';
 import { createEditor } from './editor.js';
 import { runCode, isJavaClassNameError } from '../runner/godbolt.js';
@@ -27,16 +27,7 @@ export function createWorkspace(mount, opts) {
       <button class="btn btn-primary btn-run"><span class="btn-ico">▶</span> <span class="btn-txt">${t('editor.run')}</span></button>
       ${exercise ? `<button class="btn btn-judge btn-run-judge"><span class="btn-ico">✓</span> <span class="btn-txt">${t('editor.runAndJudge')}</span></button>` : ''}
       <button class="btn btn-reset"><span class="btn-ico">↺</span> <span class="btn-txt">${t('editor.reset')}</span></button>
-      <button class="btn btn-trial"><span class="btn-ico">🧪</span> <span class="btn-txt">${t('editor.trialToggle')}</span></button>
       <span class="ws-draft">${t('editor.draftSaved')}</span>
-    </div>
-    <div class="trial-box" hidden>
-      <div class="trial-head">
-        <span class="trial-title">🧪 ${t('editor.trialTitle')}</span>
-        <span class="trial-note">${t('editor.trialNote')}</span>
-      </div>
-      <textarea class="trial-stdin" rows="2" spellcheck="false" placeholder="${t('editor.trialPlaceholder')}"></textarea>
-      <button class="btn btn-trial-run"><span class="btn-ico">▶</span> <span class="btn-txt">${t('editor.trialRun')}</span></button>
     </div>
     <div class="editor-box"></div>
     <div class="output-area"></div>
@@ -52,10 +43,6 @@ export function createWorkspace(mount, opts) {
   const runBtn = $('.btn-run');
   const judgeBtn = $('.btn-run-judge');
   const resetBtn = $('.btn-reset');
-  const trialBtn = $('.btn-trial');
-  const trialBox = $('.trial-box');
-  const trialStdin = $('.trial-stdin');
-  const trialRunBtn = $('.btn-trial-run');
   const draftLabel = $('.ws-draft');
 
   const ed = createEditor(editorBox, langId, code);
@@ -76,7 +63,7 @@ export function createWorkspace(mount, opts) {
   }
 
   function setBusy(busy) {
-    [runBtn, resetBtn, trialBtn, trialRunBtn].forEach((b) => { if (b) b.disabled = busy; });
+    [runBtn, resetBtn].forEach((b) => { if (b) b.disabled = busy; });
     if (judgeBtn) judgeBtn.disabled = busy;
     if (busy) {
       runBtn.innerHTML = '<span class="spinner"></span> <span>' + t('editor.running') + '</span>';
@@ -95,30 +82,6 @@ export function createWorkspace(mount, opts) {
   }
   resetBtn.addEventListener('click', reset);
 
-  // ---- 自定义输入试跑（🧪 不计分）----
-  trialBtn.addEventListener('click', () => {
-    trialBox.hidden = !trialBox.hidden;
-    if (!trialBox.hidden) trialStdin.focus();
-  });
-  function runTrial() {
-    clearPanels();
-    setBusy(true);
-    runCode(langDef, ed.getValue(), { stdin: trialStdin.value })
-      .then((result) => {
-        setBusy(false);
-        renderOutput(result, { trial: true });
-      })
-      .catch((err) => {
-        setBusy(false);
-        renderRunnerError(err);
-      });
-  }
-  trialRunBtn.addEventListener('click', runTrial);
-  trialStdin.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + Enter 快捷试跑
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runTrial(); }
-  });
-
   function clearPanels() {
     outputArea.innerHTML = '';
     judgeArea.innerHTML = '';
@@ -126,16 +89,14 @@ export function createWorkspace(mount, opts) {
   }
 
   // ---- 输出面板 ----
-  /** @param {object} result 归一化运行结果
-   *  @param {object} [ext] { trial?: boolean } 试跑模式：面板顶部加"试跑不计分"标记 */
-  function renderOutput(result, ext) {
-    const trial = !!(ext && ext.trial);
+  /** @param {object} result 归一化运行结果 */
+  function renderOutput(result) {
     const tabs = [];
     if (result.compileStderr) tabs.push(['compile', t('runner.compileError'), true]);
     if (result.stdout) tabs.push(['stdout', 'stdout', false]);
     if (result.stderr) tabs.push(['stderr', t('runner.runtimeError'), true]);
     if (tabs.length === 0) {
-      outputArea.innerHTML = `<div class="output-panel">${trial ? `<div class="output-flag">🧪 ${t('editor.trialResult')}</div>` : ''}<div class="output-body"><span class="output-empty">${t('runner.noOutput')}</span></div></div>`;
+      outputArea.innerHTML = `<div class="output-panel"><div class="output-body"><span class="output-empty">${t('runner.noOutput')}</span></div></div>`;
       return;
     }
     const bodies = {
@@ -146,7 +107,6 @@ export function createWorkspace(mount, opts) {
     const first = tabs[0][0];
     outputArea.innerHTML = `
       <div class="output-panel">
-        ${trial ? `<div class="output-flag">🧪 ${t('editor.trialResult')}</div>` : ''}
         <div class="output-tabs">${tabs.map(([k, label, err]) =>
           `<button class="output-tab ${k === first ? 'active' : ''} ${err ? 'has-err' : ''}" data-tab="${k}">${label}</button>`).join('')}
         </div>
