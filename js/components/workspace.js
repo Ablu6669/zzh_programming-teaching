@@ -16,6 +16,8 @@ import { draftSet, draftClear } from '../progress.js';
 export function createWorkspace(mount, opts) {
   const { langDef, langId, topicId, exercise } = opts;
   let code = opts.code || '';
+  // 批 4：逐步执行仅 Python（浏览器本地 Pyodide 引擎）；其他语言在浏览器内无可用解释链
+  const stepSupported = langId === 'python';
 
   // ---- DOM 骨架 ----
   mount.innerHTML = `
@@ -26,10 +28,12 @@ export function createWorkspace(mount, opts) {
     <div class="ws-toolbar">
       <button class="btn btn-primary btn-run"><span class="btn-ico">▶</span> <span class="btn-txt">${t('editor.run')}</span></button>
       ${exercise ? `<button class="btn btn-judge btn-run-judge"><span class="btn-ico">✓</span> <span class="btn-txt">${t('editor.runAndJudge')}</span></button>` : ''}
+      ${stepSupported ? `<button class="btn btn-step"><span class="btn-ico">🐢</span> <span class="btn-txt">${t('editor.step')}</span></button>` : ''}
       <button class="btn btn-reset"><span class="btn-ico">↺</span> <span class="btn-txt">${t('editor.reset')}</span></button>
       <span class="ws-draft">${t('editor.draftSaved')}</span>
     </div>
     <div class="editor-box"></div>
+    <div class="step-area"></div>
     <div class="output-area"></div>
     <div class="judge-area"></div>
     <div class="runner-error-area"></div>
@@ -37,11 +41,13 @@ export function createWorkspace(mount, opts) {
 
   const $ = (sel) => mount.querySelector(sel);
   const editorBox = $('.editor-box');
+  const stepArea = $('.step-area');
   const outputArea = $('.output-area');
   const judgeArea = $('.judge-area');
   const errorArea = $('.runner-error-area');
   const runBtn = $('.btn-run');
   const judgeBtn = $('.btn-run-judge');
+  const stepBtn = $('.btn-step');
   const resetBtn = $('.btn-reset');
   const draftLabel = $('.ws-draft');
 
@@ -406,6 +412,24 @@ export function createWorkspace(mount, opts) {
   runBtn.addEventListener('click', () => execute(false));
   if (judgeBtn) judgeBtn.addEventListener('click', () => execute(true));
 
+  // ---- 逐步执行（批 4：仅 Python，懒加载 stepper 模块） ----
+  let stepApi = null;
+  if (stepBtn) {
+    stepBtn.addEventListener('click', async () => {
+      if (!stepApi) {
+        try {
+          const mod = await import('../stepper/stepper.js');
+          stepApi = mod.createStepController(stepArea, { getCode: () => ed.getValue() });
+        } catch (e) {
+          // 模块本身加载失败（理论上仅在断网且无 SW 缓存时发生）
+          errorArea.innerHTML = `<div class="runner-error"><div class="re-title">⚠ ${t('step.networkError')}</div></div>`;
+          return;
+        }
+      }
+      stepApi.toggle();
+    });
+  }
+
   function renderNote(note) {
     return note.split('\n').filter(Boolean).map((l) => {
       const m = l.match(/^(\w+)\s*[:：]\s*(.*)$/);
@@ -425,7 +449,11 @@ export function createWorkspace(mount, opts) {
   }
 
   return {
-    destroy: () => { clearTimeout(draftTimer); ed.destroy(); },
+    destroy: () => {
+      clearTimeout(draftTimer);
+      if (stepApi) { try { stepApi.destroy(); } catch (e) { /* ignore */ } }
+      ed.destroy();
+    },
     setCode: (v) => ed.setValue(v),
     // 容器从 display:none 变为可见后调用，让 CodeMirror 重新测量布局（修复行号栏/代码重叠）
     refresh: () => { try { ed.refresh(); } catch (e) { /* ignore */ } },

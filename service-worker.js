@@ -1,8 +1,9 @@
 // service-worker.js — Polyglot Lab app shell 缓存
 // 策略：导航 network-first（失败回 app shell → offline.html）
 //       同源静态 cache-first（忽略 ?v= 查询参数）
-//       第三方域（godbolt 等）网络透传，不缓存
-const CACHE_VERSION = 'plw-v2';
+//       Pyodide CDN（jsdelivr /pyodide/）：运行时 cache-first——首次联网下载后离线可用
+//       其余第三方域（godbolt 等）网络透传，不缓存
+const CACHE_VERSION = 'plw-v3';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -25,6 +26,11 @@ const SHELL_FILES = [
   './js/views/roadmapView.js',
   './js/views/topicView.js',
   './js/components/workspace.js',
+  './js/components/editor.js',
+  './js/judge.js',
+  './js/diagnose.js',
+  './js/stepper/trace.js',
+  './js/stepper/stepper.js',
   './js/runner/godbolt.js',
   './i18n/zh.js',
   './i18n/en.js',
@@ -71,7 +77,25 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
 
-  // 第三方域（含 godbolt API）：网络透传，不缓存
+  // Pyodide 引擎（jsdelivr 固定版本）：cache-first 运行时缓存。
+  // 首次需联网下载（~10MB），之后离线也能逐步执行。CORS 响应也要缓存（type='cors'）。
+  if (url.hostname === 'cdn.jsdelivr.net' && url.pathname.startsWith('/pyodide/')) {
+    event.respondWith(
+      caches.match(req).then((cached) => {
+        if (cached) return cached;
+        return fetch(req).then((res) => {
+          if (res && (res.ok || res.type === 'opaque')) {
+            const copy = res.clone();
+            caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
+          }
+          return res;
+        });
+      })
+    );
+    return;
+  }
+
+  // 其余第三方域（含 godbolt API）：网络透传，不缓存
   if (url.origin !== self.location.origin) return;
 
   // 导航请求：network-first，失败回 app shell → offline.html

@@ -429,6 +429,72 @@ textarea.fallback-editor {
 }
 .solution-code pre code { background: none; padding: 0; color: var(--fg); font-size: 13px; line-height: 1.6; }
 
+/* 逐步执行面板（批 4，仅 Python） */
+.step-area:empty { display: none; }
+.step-panel { margin-top: 16px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--bg-panel); }
+.step-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 14px; background: var(--bg-code); border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.step-title { font-weight: 700; color: var(--fg); }
+.step-count { color: var(--accent); font-family: Consolas, monospace; font-size: 12.5px; }
+.step-state { color: var(--fg-faint); font-size: 12.5px; flex: 1; }
+.step-mini-btn {
+  background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer;
+  color: var(--fg-dim); font-size: 13px; padding: 2px 8px; line-height: 1.4;
+}
+.step-mini-btn:hover { color: var(--fg); border-color: var(--border); background: var(--bg-soft); }
+.step-statusbar { padding: 0 14px; font-size: 13px; color: var(--fg-dim); }
+.step-statusbar:empty { display: none; }
+.step-statusbar .spinner { display: inline-block; margin-right: 6px; }
+.step-net-err { color: var(--err); padding: 10px 0; }
+.step-main { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); min-height: 120px; }
+.step-code { border-right: 1px solid var(--border); overflow: auto; max-height: 360px; background: var(--bg-code); }
+.step-code pre { margin: 0; padding: 10px 0; font-size: 13px; line-height: 1.7; }
+.step-ln { display: flex; gap: 0; white-space: pre; }
+.step-ln-no {
+  flex: none; width: 40px; text-align: right; padding-right: 10px;
+  color: var(--fg-faint); user-select: none; font-size: 11.5px; line-height: inherit;
+}
+.step-ln-code { padding-right: 14px; color: var(--fg); }
+.step-ln.cur { background: rgba(139, 233, 253, .12); box-shadow: inset 3px 0 0 var(--accent); }
+html[data-theme="light"] .step-ln.cur { background: rgba(8, 145, 178, .10); }
+.step-ln.cur .step-ln-no { color: var(--accent-strong); font-weight: 700; }
+.step-vars { overflow: auto; max-height: 360px; padding: 10px 14px; }
+.step-vars-title, .step-out-title {
+  font-size: 11.5px; font-weight: 700; color: var(--fg-faint);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+}
+.step-vars-empty { color: var(--fg-faint); font-size: 12.5px; }
+.step-frame { margin-bottom: 10px; }
+.step-frame-name {
+  font-size: 12px; font-weight: 700; color: var(--warn);
+  font-family: Consolas, monospace; border-bottom: 1px dashed var(--border);
+  padding-bottom: 2px; margin-bottom: 4px;
+}
+.step-var { display: flex; gap: 8px; font-family: Consolas, monospace; font-size: 12.5px; line-height: 1.6; }
+.step-var-name { color: var(--accent-strong); flex: none; min-width: 48px; }
+.step-var-val { color: var(--fg); word-break: break-all; }
+.step-bottom { border-top: 1px solid var(--border); padding: 10px 14px 12px; }
+.step-ctrl { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.step-btn {
+  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--fg-dim); font-size: 13px; padding: 4px 10px; cursor: pointer; line-height: 1.4;
+}
+.step-btn:hover:not(:disabled) { color: var(--fg); border-color: var(--accent); }
+.step-btn:disabled { opacity: .45; cursor: default; }
+.step-slider { flex: 1; accent-color: var(--accent-strong); cursor: pointer; }
+.step-out-title { margin-bottom: 4px; }
+.step-out-body {
+  margin: 0; background: var(--bg-code); border-radius: 8px; border: 1px solid var(--border);
+  padding: 10px 12px; font-size: 13px; max-height: 160px; overflow: auto;
+  white-space: pre-wrap; word-break: break-word; min-height: 40px;
+}
+.step-out-err { color: var(--err); font-weight: 600; }
+.btn-step { border-color: var(--border); }
+.btn-step:hover { color: var(--warn); border-color: var(--warn); }
+
 /* 运行器错误提示 */
 .runner-error { margin-top: 14px; border: 1px solid var(--err); background: rgba(255, 107, 122, .07); border-radius: 10px; padding: 14px 18px; font-size: 13.5px; }
 .runner-error .re-title { color: var(--err); font-weight: 700; margin-bottom: 6px; }
@@ -458,4 +524,9 @@ textarea.fallback-editor {
   .topic-row { gap: 10px; padding: 12px 14px; }
   .CodeMirror, textarea.fallback-editor { height: 280px; }
   .brand-name { display: none; }
+  .step-main { grid-template-columns: 1fr; }
+  .step-code { border-right: none; border-bottom: 1px solid var(--border); max-height: 260px; }
+  .step-vars { max-height: 200px; }
+  .step-ctrl { flex-wrap: wrap; }
+  .step-slider { flex-basis: 100%; }
 }
