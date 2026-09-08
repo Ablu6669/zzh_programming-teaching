@@ -81,7 +81,9 @@ export function createWorkspace(mount, opts) {
   function reset() {
     confirmDialog(t('editor.resetConfirm')).then((ok) => {
       if (!ok) return;
-      ed.setValue(opts.code || '');
+      // 重置回到「初始模板」而非创建时快照：
+      // opts.code 可能是上次会话带回的旧草稿（print(123)），若用它恢复会导致「看起来没重置」。
+      ed.setValue(exercise ? (exercise.starter || '') : (opts.code || ''));
       clearPanels();
       if (exercise) draftClear(langId, topicId, exercise.id);
     });
@@ -92,6 +94,9 @@ export function createWorkspace(mount, opts) {
     outputArea.innerHTML = '';
     judgeArea.innerHTML = '';
     errorArea.innerHTML = '';
+    // 逐步执行面板也在「清理范围内」：点重置/运行/判定后应关闭（否则旧轨迹/旧代码残留）
+    if (stepApi) { try { stepApi.destroy(); } catch (e) { /* ignore */ } }
+    stepArea.innerHTML = '';
   }
 
   // ---- 输出面板 ----
