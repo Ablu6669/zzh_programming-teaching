@@ -163,7 +163,7 @@ Next lesson: teaching your program to "remember things" — variables and primit
       examples: [
         {
           caption: { zh: '你好，世界', en: 'Hello, world' },
-          code: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("你好，Java");\n    }\n}\n',
+          code: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("Hello, Java");\n    }\n}\n',
         },
         {
           caption: { zh: 'print vs println', en: 'print vs println' },

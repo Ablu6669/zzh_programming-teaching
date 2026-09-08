@@ -180,7 +180,7 @@ print("Hello, World!")
 - \`"Hello, World!"\`: the quoted text is printed **exactly as written**. The space after the comma is there because you typed it — the computer added nothing
 
 \`\`\`python
-print("你好，Python")
+print("Hello, Python")
 \`\`\`
 
 - The second line runs right after the first. Each \`print()\` ends with an **automatic newline**, so the two sentences each occupy one line
@@ -200,7 +200,7 @@ print(name, version)
 - Printing two values inserts a space between them, giving \`Python 3.1\` (\`3.10\` is treated as the number 3.1 — a classic trap)
 
 \`\`\`python
-# 输出: Python 3.1（注意：3.10 会被当作数字 3.1）
+# Output: Python 3.1 (note: 3.10 is printed as the number 3.1)
 \`\`\`
 
 - Starts with \`#\` — a comment; it does not affect the program
@@ -225,11 +225,11 @@ Next lesson we learn **variables** — giving data names so programs can remembe
       examples: [
         {
           caption: { zh: '你好，世界', en: 'Hello, world' },
-          code: 'print("Hello, World!")\nprint("你好，Python")\n',
+          code: 'print("Hello, World!")\nprint("Hello, Python")\n',
         },
         {
           caption: { zh: '逗号分隔输出多个值', en: 'Multiple values separated by commas' },
-          code: 'name = "Python"\nversion = 3.10\nprint(name, version)\n# 输出: Python 3.1（注意：3.10 会被当作数字 3.1）\nprint("name =", name)\n',
+          code: 'name = "Python"\nversion = 3.10\nprint(name, version)\n# Output: Python 3.1 (note: 3.10 is printed as the number 3.1)\nprint("name =", name)\n',
         },
       ],
       exercises: [
@@ -966,7 +966,7 @@ print(grade)   # B
 age = 20
 has_ticket = True
 if age >= 18 and has_ticket:
-    print("可以入场")
+    print("Entry allowed")
 \`\`\`
 
 4. **Branch count is flexible**: \`elif\` may appear any number of times (or none at all); \`else\` at most once, at the end.

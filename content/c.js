@@ -154,7 +154,7 @@ The example code for this lesson:
 
 int main(void) {
     printf("Hello, C!\\n");
-    printf("你好，C\\n");
+    printf("Hello, C\\n");
     return 0;
 }
 \`\`\`
@@ -162,7 +162,7 @@ int main(void) {
 - Line 1: pulls in the standard input/output toolbox so \`printf\` is available below.
 - Line 3: defines the main function — execution starts here.
 - Line 4: prints \`Hello, C!\`; the trailing \`\\n\` moves the cursor to the start of the next line.
-- Line 5: prints another line, \`你好，C\`, also ending with \`\\n\`. \`printf\` handles Chinese text just fine.
+- Line 5: prints another line, \`Hello, C\`, also ending with \`\\n\`. \`printf\` handles any text you give it.
 - Line 6: returns 0, telling the operating system "all is well".
 - Line 7: the main function ends. Two lines of text remain on the screen.
 
@@ -185,7 +185,7 @@ Next lesson: **variables** — teaching your program to remember data.`,
       examples: [
         {
           caption: { zh: '你好，世界', en: 'Hello, world' },
-          code: '#include <stdio.h>\n\nint main(void) {\n    printf("Hello, C!\\n");\n    printf("你好，C\\n");\n    return 0;\n}\n',
+          code: '#include <stdio.h>\n\nint main(void) {\n    printf("Hello, C!\\n");\n    printf("Hello, C\\n");\n    return 0;\n}\n',
         },
       ],
       exercises: [
