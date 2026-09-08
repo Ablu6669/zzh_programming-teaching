@@ -110,7 +110,9 @@ button { font-family: inherit; }
 .lc-badge.partial { background: rgba(241, 250, 140, .10); color: var(--warn); border-color: rgba(241, 250, 140, .35); }
 
 /* ============ 路线图 ============ */
-.roadmap-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+/* 居中单列学习路径：所有节点居于页面正中，右侧不再留白 */
+.roadmap-page { max-width: 760px; margin: 0 auto; }
+.roadmap-head { margin-bottom: 22px; }
 .crumb { font-size: 13px; color: var(--fg-dim); margin-bottom: 14px; }
 .crumb a { color: var(--accent); }
 .topic-list { display: flex; flex-direction: column; gap: 10px; }
@@ -133,44 +135,57 @@ button { font-family: inherit; }
 .tr-stars { color: var(--warn); font-size: 13px; letter-spacing: 2px; flex: none; }
 .tr-arrow { color: var(--fg-faint); flex: none; }
 
-/* ---- 学习路径节点图（roadmap 升级） ---- */
+/* ---- 学习路径节点图（roadmap 升级）：单列居中 + 竖线箭头 ---- */
 .roadmap-summary {
-  font-size: 13px; color: var(--fg-dim); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: 13px; color: var(--fg-dim); margin-bottom: 22px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
 .roadmap-summary .progress-track { flex: 0 1 200px; }
 
 .roadmap-grid {
-  display: grid; grid-template-columns: 1fr; gap: 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
   position: relative;
 }
-@media (min-width: 720px) { .roadmap-grid { grid-template-columns: 1fr 1fr; column-gap: 56px; row-gap: 18px; } }
 
+/* 节点间连接线：居中竖线 + 末端箭头 */
 .path-arrow {
-  display: flex; align-items: center; justify-content: center;
-  color: var(--fg-faint); font-size: 18px; margin: -4px 0;
+  position: relative;
+  width: 2px; height: 34px;
+  margin: 2px 0;
+  background: var(--border);
+  flex: none;
 }
-.path-arrow.unlocked { color: var(--accent); }
+.path-arrow::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid var(--border);
+}
+.path-arrow.unlocked { background: var(--accent); }
+.path-arrow.unlocked::after { border-top-color: var(--accent); }
 .path-arrow.locked { opacity: .4; }
 
-/* 节点卡片（双列布局时由 :nth-child 决定左右对齐 + 箭头弯折） */
+/* 节点卡片：居中，占满 roadmap-page 宽度 */
 .topic-node {
   position: relative;
   background: var(--bg-panel); border: 1px solid var(--border); border-radius: 14px;
   padding: 14px 16px; color: var(--fg);
   display: flex; align-items: center; gap: 14px;
-  transition: border-color .15s, transform .15s, opacity .15s;
+  transition: border-color .15s, transform .15s, opacity .15s, box-shadow .15s;
   text-decoration: none;
+  width: 100%;
 }
-.topic-node:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
+.topic-node:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow); }
 .topic-node.done { border-left: 4px solid var(--ok); }
 .topic-node.active { border-left: 4px solid var(--warn); }
-.topic-node.todo { border-left: 4px solid var(--border); opacity: .9; }
+.topic-node.todo { border-left: 4px solid var(--border); opacity: .95; }
 .topic-node.locked { opacity: .45; cursor: not-allowed; pointer-events: auto; }
-.topic-node.locked:hover { transform: none; border-color: var(--border); }
+.topic-node.locked:hover { transform: none; border-color: var(--border); box-shadow: none; }
 
 .tn-icon {
-  width: 36px; height: 36px; border-radius: 10px;
+  width: 38px; height: 38px; border-radius: 10px;
   background: var(--bg-code); display: flex; align-items: center; justify-content: center;
   font-size: 18px; flex: none;
 }
@@ -180,7 +195,7 @@ button { font-family: inherit; }
 .tn-body { flex: 1; min-width: 0; }
 .tn-title { font-weight: 700; font-size: 15px; }
 .tn-sub { font-size: 12.5px; color: var(--fg-faint); margin-top: 3px; }
-.tn-progress-bar { height: 4px; background: var(--bg-code); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+.tn-progress-bar { max-width: 220px; height: 4px; background: var(--bg-code); border-radius: 2px; overflow: hidden; margin-top: 8px; }
 .tn-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
 
 .topic-node.locked .lock-tip {
@@ -200,6 +215,7 @@ button { font-family: inherit; }
 }
 @media (max-width: 480px) {
   .roadmap-summary { font-size: 12.5px; }
+  .roadmap-head h1 { font-size: 21px; }
   .topic-node { padding: 12px 14px; }
   .tn-icon { width: 32px; height: 32px; font-size: 16px; }
 }

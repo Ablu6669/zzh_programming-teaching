@@ -36,7 +36,7 @@ export function renderRoadmap(app, langId) {
     if (i > 0) {
       const prevDone = isTopicDone(langId, topics[i - 1]);
       blocks.push(
-        `<div class="path-arrow${prevDone ? ' unlocked' : ' locked'}" aria-hidden="true">${prevDone ? '↓' : '·'}</div>`
+        `<div class="path-arrow${prevDone ? ' unlocked' : ' locked'}" aria-hidden="true"></div>`
       );
     }
 
@@ -60,7 +60,6 @@ export function renderRoadmap(app, langId) {
             <div class="tn-sub">🎯 ${passed}/${tp.exercises.length} ${t('roadmap.exercisesUnit')} · ${stars}</div>
             <div class="tn-progress-bar"><div class="tn-progress-fill" style="width:${pct}%"></div></div>
           </div>
-          <span class="tr-arrow" aria-hidden="true">›</span>
         </a>`);
     }
   });
@@ -72,19 +71,19 @@ export function renderRoadmap(app, langId) {
     .replace('{total}', st.exercises);
 
   app.innerHTML = `
-    <div class="crumb"><a href="#/">${t('nav.home')}</a> › ${def.name}</div>
-    <div class="roadmap-head">
-      <div>
+    <div class="roadmap-page">
+      <div class="crumb"><a href="#/">${t('nav.home')}</a> › ${def.name}</div>
+      <div class="roadmap-head">
         <h1 class="page-title">${def.name} · ${t('roadmap.title')}</h1>
         <p class="page-sub">${pick(def.description)}</p>
       </div>
+      <div class="roadmap-summary">
+        <span>${summary}</span>
+        <div class="progress-track"><div class="progress-fill" style="width:${st.pct}%"></div></div>
+        <span class="progress-num">${st.pct}%</span>
+      </div>
+      <div class="roadmap-grid">${blocks.join('')}</div>
     </div>
-    <div class="roadmap-summary">
-      <span>${summary}</span>
-      <div class="progress-track"><div class="progress-fill" style="width:${st.pct}%"></div></div>
-      <span class="progress-num">${st.pct}%</span>
-    </div>
-    <div class="roadmap-grid">${blocks.join('')}</div>
   `;
 
   // 锁定节点点击 → 临时显示 tooltip（避免 sandbox iframe 拦截 alert）
