@@ -76,3 +76,15 @@ document.getElementById('btn-lang').addEventListener('click', () => {
 document.getElementById('btn-theme').addEventListener('click', toggleTheme);
 
 startRouter();
+
+// ---- PWA Service Worker ----
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  const isHttps = location.protocol === 'https:';
+  if (!isLocal && !isHttps) return;
+  navigator.serviceWorker.register('./service-worker.js').catch((err) => {
+    console.warn('[SW] 注册失败：', err);
+  });
+}
+registerSW();

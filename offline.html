@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e1e2e">
+  <title>已离线 · Offline · Polyglot Lab</title>
+  <style>
+    :root { color-scheme: dark; }
+    html, body {
+      margin: 0; padding: 0; min-height: 100vh;
+      background: #1e1e2e; color: #e6e6ef;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; box-sizing: border-box;
+    }
+    .card {
+      max-width: 480px; text-align: center;
+      background: #2a2a3e; border-radius: 16px;
+      padding: 40px 32px; box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+    .icon { font-size: 64px; margin-bottom: 16px; }
+    h1 { margin: 0 0 12px; font-size: 24px; font-weight: 700; }
+    p { margin: 0 0 24px; color: #a0a0b0; line-height: 1.6; font-size: 14.5px; }
+    .links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    a {
+      display: inline-block; padding: 10px 18px;
+      background: #44475a; color: #8be9fd;
+      border-radius: 8px; text-decoration: none; font-size: 14px;
+      transition: background .15s;
+    }
+    a:hover { background: #525571; }
+    a.primary { background: #50fa7b; color: #1e1e2e; font-weight: 600; }
+    a.primary:hover { background: #6cff95; }
+    .sep { color: #6272a4; margin: 0 4px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon" aria-hidden="true">📡</div>
+    <h1>离线模式 · You're Offline</h1>
+    <p>
+      当前没有网络连接。<br>
+      你浏览过的页面仍在缓存中可用，但在线判题、下载新章节需要联网。<br><br>
+      <span style="color:#6272a4">No network connection. Cached pages are still available, but online judging and new content need the internet.</span>
+    </p>
+    <div class="links">
+      <a class="primary" href="./">↺ 重新加载 / Reload</a>
+      <a href="./#/lang/python">Python</a>
+      <a href="./#/lang/c">C</a>
+      <a href="./#/lang/cpp">C++</a>
+      <a href="./#/lang/java">Java</a>
+    </div>
+  </div>
+</body>
+</html>

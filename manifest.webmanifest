@@ -1,0 +1,33 @@
+{
+  "name": "编程语言学习工作台 · Polyglot Lab",
+  "short_name": "Polyglot Lab",
+  "description": "Java / C / C++ / Python 交互式学习工作台 — 知识点讲解 + 在线实战训练，代码在线执行。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#1e1e2e",
+  "background_color": "#1e1e2e",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["education", "productivity", "developer"]
+}
