@@ -133,6 +133,91 @@ button { font-family: inherit; }
 .tr-stars { color: var(--warn); font-size: 13px; letter-spacing: 2px; flex: none; }
 .tr-arrow { color: var(--fg-faint); flex: none; }
 
+/* ---- 学习路径节点图（roadmap 升级） ---- */
+.roadmap-summary {
+  font-size: 13px; color: var(--fg-dim); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.roadmap-summary .progress-track { flex: 0 1 200px; }
+
+.roadmap-grid {
+  display: grid; grid-template-columns: 1fr; gap: 14px;
+  position: relative;
+}
+@media (min-width: 720px) { .roadmap-grid { grid-template-columns: 1fr 1fr; column-gap: 56px; row-gap: 18px; } }
+
+.path-arrow {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-faint); font-size: 18px; margin: -4px 0;
+}
+.path-arrow.unlocked { color: var(--accent); }
+.path-arrow.locked { opacity: .4; }
+
+/* 节点卡片（双列布局时由 :nth-child 决定左右对齐 + 箭头弯折） */
+.topic-node {
+  position: relative;
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 16px; color: var(--fg);
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color .15s, transform .15s, opacity .15s;
+  text-decoration: none;
+}
+.topic-node:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
+.topic-node.done { border-left: 4px solid var(--ok); }
+.topic-node.active { border-left: 4px solid var(--warn); }
+.topic-node.todo { border-left: 4px solid var(--border); opacity: .9; }
+.topic-node.locked { opacity: .45; cursor: not-allowed; pointer-events: auto; }
+.topic-node.locked:hover { transform: none; border-color: var(--border); }
+
+.tn-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--bg-code); display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex: none;
+}
+.topic-node.done .tn-icon { background: rgba(80, 250, 123, .12); color: var(--ok); }
+.topic-node.active .tn-icon { background: rgba(241, 250, 140, .12); color: var(--warn); }
+
+.tn-body { flex: 1; min-width: 0; }
+.tn-title { font-weight: 700; font-size: 15px; }
+.tn-sub { font-size: 12.5px; color: var(--fg-faint); margin-top: 3px; }
+.tn-progress-bar { height: 4px; background: var(--bg-code); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+.tn-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+
+.topic-node.locked .lock-tip {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; font-size: 12.5px; color: var(--fg); white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0,0,0,.3); opacity: 0; pointer-events: none;
+  transition: opacity .15s; z-index: 5;
+}
+.topic-node.locked:hover .lock-tip,
+.topic-node.locked.lock-tip-visible .lock-tip { opacity: 1; }
+
+.start-here-badge {
+  display: inline-block; background: var(--accent); color: #1a1a1a;
+  font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+  margin-left: 6px; vertical-align: middle;
+}
+@media (max-width: 480px) {
+  .roadmap-summary { font-size: 12.5px; }
+  .topic-node { padding: 12px 14px; }
+  .tn-icon { width: 32px; height: 32px; font-size: 16px; }
+}
+
+/* ---- homeView 续学入口 ---- */
+.continue-card {
+  display: flex; align-items: center; gap: 14px;
+  background: linear-gradient(135deg, rgba(80, 250, 123, .10), rgba(139, 233, 253, .08));
+  border: 1px solid rgba(80, 250, 123, .35); border-radius: 14px;
+  padding: 16px 18px; color: var(--fg); text-decoration: none;
+  margin-bottom: 22px;
+}
+.continue-card:hover { text-decoration: none; border-color: var(--ok); }
+.cc-icon { font-size: 22px; }
+.cc-title { font-weight: 700; font-size: 15px; }
+.cc-sub { font-size: 12.5px; color: var(--fg-dim); margin-top: 2px; }
+.cc-arrow { margin-left: auto; font-size: 20px; color: var(--ok); }
+
 /* 进度条 */
 .progress-track { height: 8px; background: var(--bg-code); border-radius: 6px; overflow: hidden; flex: 1; min-width: 120px; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--ok)); border-radius: 6px; transition: width .4s; }

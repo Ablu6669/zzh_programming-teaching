@@ -6,6 +6,7 @@ import { renderHome } from './views/homeView.js';
 import { renderRoadmap, renderNotFound } from './views/roadmapView.js';
 import { renderTopic, destroyTopicView } from './views/topicView.js';
 import { getLangDef, getLangIds } from './content.js';
+import { lastVisitSet } from './progress.js';
 
 const THEME_KEY = 'plw:theme';
 
@@ -41,7 +42,11 @@ function render(route) {
   switch (route.name) {
     case 'home': renderHome(app, langDefs()); break;
     case 'roadmap': renderRoadmap(app, route.params.lang); break;
-    case 'topic': renderTopic(app, route.params.lang, route.params.tid, route.params.eid); break;
+    case 'topic':
+      renderTopic(app, route.params.lang, route.params.tid, route.params.eid);
+      // 续学追踪（仅在进入题库时记录；切语言重渲染不算）
+      lastVisitSet(route.params.lang, route.params.tid, route.params.eid || null);
+      break;
     default: renderNotFound(app);
   }
   applyI18n(app);

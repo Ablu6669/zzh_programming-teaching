@@ -15,6 +15,14 @@ export default {
   'roadmap.title': 'Learning Path',
   'roadmap.exercisesUnit': 'solved',
   'roadmap.difficulty': 'Difficulty',
+  'roadmap.locked': 'Locked',
+  'roadmap.lockedHint': 'Finish "{prev}" to unlock',
+  'roadmap.startHere': 'Start here',
+  'roadmap.summary': '{topics} topics · {passed}/{total} solved',
+
+  'home.continueLearning': 'Continue learning',
+  'home.lastVisited': 'Last visited: {lang} · {topic}{ex}',
+  'home.startFromFirst': 'Start from lesson 1',
 
   'topic.entryNote': 'Before you run',
   'topic.tabLecture': 'Lecture',

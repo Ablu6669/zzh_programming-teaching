@@ -1,6 +1,7 @@
-// progress.js — localStorage 进度 + 每题代码草稿
+// progress.js — localStorage 进度 + 每题代码草稿 + 上次访问
 const P_KEY = 'plw:progress';
 const DRAFT_PREFIX = 'plw:code-draft:';
+const LAST_VISIT_KEY = 'plw:last-visit';
 
 function readJSON(key, fallback) {
   try {
@@ -41,4 +42,21 @@ export function draftSet(langId, topicId, exId, code) {
 
 export function draftClear(langId, topicId, exId) {
   try { localStorage.removeItem(draftKey(langId, topicId, exId)); } catch (e) { /* ignore */ }
+}
+
+// ---- 上次访问（续学用） ----
+
+/** 记录「最近去过」某语言/知识点/题。值是任意对象，方便将来扩展。 */
+export function lastVisitSet(langId, topicId, exId) {
+  try {
+    const payload = { langId, topicId, exId, at: Date.now() };
+    localStorage.setItem(LAST_VISIT_KEY, JSON.stringify(payload));
+  } catch (e) { /* ignore */ }
+}
+
+export function lastVisitGet() {
+  try {
+    const raw = localStorage.getItem(LAST_VISIT_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
 }

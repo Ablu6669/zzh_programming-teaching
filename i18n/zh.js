@@ -15,6 +15,14 @@ export default {
   'roadmap.title': '学习路线',
   'roadmap.exercisesUnit': '题已通过',
   'roadmap.difficulty': '难度',
+  'roadmap.locked': '锁定中',
+  'roadmap.lockedHint': '完成「{prev}」后解锁',
+  'roadmap.startHere': '从这里开始',
+  'roadmap.summary': '共 {topics} 个知识点 · {passed}/{total} 题已通过',
+
+  'home.continueLearning': '继续上次学习',
+  'home.lastVisited': '上次学到：{lang} · {topic}{ex}',
+  'home.startFromFirst': '从第一节开始',
 
   'topic.entryNote': '运行须知',
   'topic.tabLecture': '讲解',
