@@ -2,7 +2,7 @@
 import { t, pick } from '../i18n.js';
 import { renderMarkdown } from '../mdrender.js';
 import { getLangDef, getTopic } from '../content.js';
-import { progressGet, progressSet, draftGet } from '../progress.js';
+import { progressGet, progressSet, draftGet, draftClear } from '../progress.js';
 import { createWorkspace } from '../components/workspace.js';
 
 let cleanups = []; // 当前页面挂载的工作区，语言切换/路由切换时销毁
@@ -144,12 +144,16 @@ export function renderTopic(app, langId, topicId, exId) {
     if (firstBtn) firstBtn.classList.add('enabled');
     const mount = card.querySelector('.workspace-mount');
     const draft = draftGet(langId, topicId, ex.id);
+    // 兜底：历史脏草稿若是对象被误存为 "[object Object]"/"[object Array]" 残渣，一律丢弃回退 starter，
+    // 并清掉 localStorage 里这条脏数据，避免下次仍恢复它。
+    const isGarbageDraft = draft !== null && draft !== undefined && /^\[object /.test(draft);
+    if (isGarbageDraft) draftClear(langId, topicId, ex.id);
     const ws = createWorkspace(mount, {
       langDef: def,
       langId,
       topicId,
       exercise: ex,
-      code: draft !== null && draft !== undefined && draft !== '' ? draft : ex.starter,
+      code: isGarbageDraft ? ex.starter : (draft !== null && draft !== undefined && draft !== '' ? draft : ex.starter),
       onPass: () => {
         if (!progressGet(langId, topicId, ex.id)) {
           progressSet(langId, topicId, ex.id, true);

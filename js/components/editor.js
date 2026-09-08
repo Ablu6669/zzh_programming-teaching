@@ -12,12 +12,14 @@ import { WORDS, MODE_NAME } from './completions.js';
  */
 export function createEditor(container, langId, value) {
   const mode = MODE_NAME[langId] || 'null';
+  // 兜底：任何非字符串 value（对象/undefined/null）一律当作空串，绝不渲染成 "[object Object]"
+  const toStr = (v) => (typeof v === 'string' ? v : '');
 
   if (typeof window.CodeMirror === 'function') {
     let cm;
     try {
       cm = window.CodeMirror(container, {
-        value: value || '',
+        value: toStr(value),
         mode: mode,
         lineNumbers: true,
         indentUnit: 4,
@@ -58,7 +60,7 @@ export function createEditor(container, langId, value) {
       const api = {
         kind: 'codemirror',
         getValue: () => cm.getValue(),
-        setValue: (v) => cm.setValue(v || ''),
+        setValue: (v) => cm.setValue(toStr(v)),
         onChange: (fn) => cm.on('change', (c) => fn(c.getValue())),
         destroy: () => { if (cm.display && cm.display.wrapper && cm.display.wrapper.parentNode) cm.display.wrapper.parentNode.removeChild(cm.display.wrapper); },
         refreshTheme: () => cm.setOption('theme', currentTheme()),
@@ -76,7 +78,7 @@ export function createEditor(container, langId, value) {
   container.innerHTML = '';
   const ta = document.createElement('textarea');
   ta.className = 'fallback-editor';
-  ta.value = value || '';
+  ta.value = toStr(value);
   ta.spellcheck = false;
   container.appendChild(ta);
   const handlers = [];
@@ -84,7 +86,7 @@ export function createEditor(container, langId, value) {
   return {
     kind: 'textarea',
     getValue: () => ta.value,
-    setValue: (v) => { ta.value = v || ''; },
+    setValue: (v) => { ta.value = toStr(v); },
     onChange: (fn) => handlers.push(fn),
     destroy: () => { ta.remove(); },
     refreshTheme: () => {},
