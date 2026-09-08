@@ -73,4 +73,5 @@ export default {
   'judge.caseLabel': '用例 {n}',
   'judge.casesFail': '第 {n} 个用例未通过',
   'judge.compileError': '编译失败',
+  'judge.solutionLabel': '查看精选解法',
 };

@@ -73,4 +73,5 @@ export default {
   'judge.caseLabel': 'Case {n}',
   'judge.casesFail': 'Case {n} did not pass',
   'judge.compileError': 'Compilation failed',
+  'judge.solutionLabel': 'View solution',
 };

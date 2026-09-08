@@ -212,7 +212,8 @@ export function createWorkspace(mount, opts) {
       judgeArea.innerHTML = `
         <div class="judge-result pass">
           <div class="judge-title">✅ ${t('judge.passed')}</div>
-        </div>`;
+        </div>${solutionFoldHTML()}`;
+      bindSolutionToggle();
       return;
     }
     judgeArea.innerHTML = `
@@ -222,6 +223,36 @@ export function createWorkspace(mount, opts) {
         ${diffGridHTML(jr)}
         ${stuckTipHTML()}
       </div>`;
+  }
+
+  /** 精选解法折叠区：判题通过后展示标准解代码 + 双语讲解（默认收起，点击展开）。批 2 新增 */
+  function solutionFoldHTML() {
+    if (!exercise) return '';
+    const sol = exercise.solution;
+    if (!sol || !sol.trim()) return '';
+    const note = (exercise.solutionNote && pick(exercise.solutionNote)) || '';
+    return `
+      <div class="solution-fold">
+        <button type="button" class="solution-toggle" aria-expanded="false">💡 ${t('judge.solutionLabel')} <span class="sol-caret">▸</span></button>
+        <div class="solution-body" hidden>
+          ${note ? `<div class="solution-note">${mdInline(note).replace(/\n+/g, '<br>')}</div>` : ''}
+          <div class="solution-code"><pre><code>${escapeHtml(sol)}</code></pre></div>
+        </div>
+      </div>`;
+  }
+
+  /** 绑定精选解法折叠切换（judgeArea 每次判题被重写，故每次渲染后重新绑定） */
+  function bindSolutionToggle() {
+    const btn = judgeArea.querySelector('.solution-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const body = judgeArea.querySelector('.solution-body');
+      const caret = btn.querySelector('.sol-caret');
+      const open = body && body.hidden;
+      if (body) body.hidden = !body.hidden;
+      if (caret) caret.textContent = open ? '▾' : '▸';
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
   }
 
   // ---- 判题：用例定义 ----
@@ -294,7 +325,8 @@ export function createWorkspace(mount, opts) {
     // ---- 汇总渲染 ----
     if (allPass) {
       failCount = 0;
-      judgeArea.innerHTML = (multi ? casesBarHTML(states) : '') + renderPassHTML(cases.length);
+      judgeArea.innerHTML = (multi ? casesBarHTML(states) : '') + renderPassHTML(cases.length) + solutionFoldHTML();
+      bindSolutionToggle();
       if (opts.onPass) opts.onPass();
       return;
     }
