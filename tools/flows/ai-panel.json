@@ -1,0 +1,31 @@
+{
+  "viewport": { "width": 1440, "height": 900 },
+  "steps": [
+    {
+      "label": "A. 初始状态（面板应 display:none，设置区应 display:none）",
+      "eval": "JSON.stringify({panel:getComputedStyle(document.querySelector('.ai-panel')).display,panelHidden:document.querySelector('.ai-panel').hidden,settings:getComputedStyle(document.querySelector('.ai-settings')).display,keyField:getComputedStyle(document.querySelector('.ai-key-field')).display,baseField:getComputedStyle(document.querySelector('.ai-base-field')).display})"
+    },
+    { "label": "B. 点击悬浮球", "click": ".ai-fab", "wait": 500 },
+    {
+      "label": "C. 展开后状态（面板应 flex）",
+      "eval": "JSON.stringify({panel:getComputedStyle(document.querySelector('.ai-panel')).display,panelHidden:document.querySelector('.ai-panel').hidden,settings:getComputedStyle(document.querySelector('.ai-settings')).display})"
+    },
+    {
+      "label": "D. 几何与命中测试",
+      "eval": "(()=>{const q=s=>document.querySelector(s);const vh=innerHeight,vw=innerWidth;const hit=sel=>{const n=q(sel);if(!n)return sel+':MISSING';const b=n.getBoundingClientRect();const el=document.elementFromPoint(b.left+b.width/2,b.top+b.height/2);return sel+(el&&el.closest(sel)?':HIT':':MISS')+'@'+Math.round(b.width)+'x'+Math.round(b.height)+(b.top>=-0.5&&b.bottom<=vh+0.5&&b.left>=-0.5&&b.right<=vw+0.5?'':':OFFSCREEN');};const p=q('.ai-panel').getBoundingClientRect();const m=q('.ai-msgs').getBoundingClientRect();return JSON.stringify({viewport:vw+'x'+vh,panelRect:[Math.round(p.top),Math.round(p.bottom)],panelInViewport:p.top>=-0.5&&p.bottom<=vh+0.5,msgsHeight:Math.round(m.height),hits:['.ai-settings-btn','.ai-clear-btn','.ai-close-btn','.ai-send','.ai-input'].map(hit)},null,1)})()"
+    },
+    { "shot": "02-open.png" },
+    { "label": "E. 点击 ⚙ 设置", "click": ".ai-settings-btn", "wait": 500 },
+    {
+      "label": "F. 设置展开后（settings 应 flex，keyField 在免费通道下应为 none）",
+      "eval": "JSON.stringify({panel:getComputedStyle(document.querySelector('.ai-panel')).display,settings:getComputedStyle(document.querySelector('.ai-settings')).display,keyField:getComputedStyle(document.querySelector('.ai-key-field')).display,baseField:getComputedStyle(document.querySelector('.ai-base-field')).display,model:document.querySelector('.ai-model').value})"
+    },
+    { "shot": "03-settings.png" },
+    { "label": "G. 点击 ✕ 关闭", "click": ".ai-close-btn", "wait": 500 },
+    {
+      "label": "H. 关闭后（面板必须 display:none，否则就是关不掉）",
+      "eval": "JSON.stringify({panel:getComputedStyle(document.querySelector('.ai-panel')).display,panelHidden:document.querySelector('.ai-panel').hidden,rootHasOpen:document.querySelector('.ai-root').classList.contains('ai-open')})"
+    },
+    { "shot": "04-after-close.png" }
+  ]
+}

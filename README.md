@@ -62,6 +62,8 @@ tools/
   verify_content.mjs  # 用真实执行后端实测全部 88 题 solution
   check_i18n.mjs      # i18n 完整性三重校验（词典/引用/双语对）
   _batch2_check.mjs   # 88 题 hints×5 + solutionNote 双语自检
+  ui_probe.mjs        # 零依赖 UI 探针（CDP 直连），跑交互流程 + 截图 + 断言
+  flows/              # ui_probe 的流程脚本
 ```
 
 ## 本地运行
@@ -81,6 +83,14 @@ python -m http.server 8000
 node tools/check_i18n.mjs       # 词典键一致 / 引用完整 / 双语对非空
 node tools/verify_content.mjs   # 在线实测全部 88 题 solution 与期望输出
 node tools/_batch2_check.mjs <python|c|cpp|java>  # 单语言 22 题 hints×5 + solutionNote 自检
+```
+
+UI 回归（需先起本地服务器，探针会自己拉起无头 Chrome 并截图）：
+
+```bash
+node tools/ui_probe.mjs http://127.0.0.1:8000/index.html \
+     --flow tools/flows/ai-panel.json --out .workbuddy/ui-probe
+node tools/ui_probe.mjs http://127.0.0.1:8000/index.html --mobile   # 390x844 移动视口
 ```
 
 ## 部署（GitHub Actions 自动发布）
