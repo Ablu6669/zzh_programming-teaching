@@ -1,9 +1,10 @@
 // service-worker.js — Polyglot Lab app shell 缓存
 // 策略：导航 network-first（失败回 app shell → offline.html）
-//       同源静态 cache-first（忽略 ?v= 查询参数）
+//       同源静态资源（style.css / js / i18n / content / vendor）network-first，失败回缓存
+//         —— 改版立即生效，断网仍可用；离线时的内容来自上一次成功访问写下的运行缓存
 //       Pyodide CDN（jsdelivr /pyodide/）：运行时 cache-first——首次联网下载后离线可用
 //       其余第三方域（godbolt 等）网络透传，不缓存
-const CACHE_VERSION = 'plw-v4';
+const CACHE_VERSION = 'plw-v5';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -116,17 +117,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 同源静态资源：cache-first（ignoreSearch 应对 ?v= 缓存破坏）
+  // 同源静态资源一律 network-first，失败才回缓存：
+  // 保证线上改动（CSS/JS/内容）立刻生效，同时断网时仍能离线打开。
+  // （旧实现是 cache-first，导致每次改版都得手动升 CACHE_VERSION，否则用户一直吃旧文件）
   event.respondWith(
-    caches.match(req, { ignoreSearch: true }).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((res) => {
+    fetch(req)
+      .then((res) => {
         if (res.ok && (res.type === 'basic' || res.type === 'default')) {
           const copy = res.clone();
           caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
         }
         return res;
-      });
-    })
+      })
+      .catch(() => caches.match(req, { ignoreSearch: true }))
   );
 });
