@@ -603,6 +603,15 @@ html[data-theme="light"] .step-ln.cur { background: rgba(8, 145, 178, .10); }
   background: var(--accent); color: #10101a; font-weight: 600; font-size: 12px;
 }
 .ai-save:hover { background: var(--accent-strong); }
+.ai-help { font-size: 12px; }
+.ai-help summary { cursor: pointer; color: var(--accent); user-select: none; }
+.ai-help summary:hover { color: var(--accent-strong); }
+.ai-help-body { margin-top: 6px; padding: 8px 10px; color: var(--fg-dim); line-height: 1.65; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+.ai-help-body a { color: var(--accent); }
+.ai-help-body ol { margin: 4px 0; padding-left: 18px; }
+.ai-help-body p { margin: 4px 0; }
+.ai-help-body code { background: var(--bg-code); border: 1px solid var(--border); padding: 1px 4px; border-radius: 4px; font-size: 11.5px; }
+.ai-help-body strong { color: var(--fg); }
 
 /* 消息区 */
 .ai-msgs { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }

@@ -11,7 +11,9 @@ function renderInline(s) {
   return s
     .replace(/`([^`]+)`/g, (_, c) => '<code>' + c + '</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    // 受限链接：仅 http/https 协议；此时字符串已整体 HTML 转义，text 与 url 均安全
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (_, text, url) => '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + text + '</a>');
 }
 
 function splitTableRow(line) {

@@ -187,6 +187,10 @@ function buildDOM() {
           <span class="ai-note">${t('ai.keyLocal')}</span>
           <button class="ai-save">${t('ai.save')}</button>
         </div>
+        <details class="ai-help">
+          <summary>❓ ${t('ai.helpTitle')}</summary>
+          <div class="ai-help-body">${renderMarkdown(t('ai.helpBody'))}</div>
+        </details>
       </div>
       <div class="ai-msgs"></div>
       <div class="ai-input-row">

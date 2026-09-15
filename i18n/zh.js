@@ -116,4 +116,6 @@ export default {
   'ai.save': '保存',
   'ai.saved': '已保存 ✓',
   'ai.keyLocal': 'Key 仅保存在你的浏览器本地，不会上传到任何服务器',
+  'ai.helpTitle': '如何获取 API Key？（约 3 分钟）',
+  'ai.helpBody': '**方式一：DeepSeek（推荐，国内直连）**\n\n1. 注册 [DeepSeek 开放平台](https://platform.deepseek.com)（手机号即可）\n2. 充值 10 元起（支付宝 / 微信），新用户有免费额度\n3. 在「API Keys」页新建并复制 `sk-` 开头的 Key\n4. 粘贴到上方输入框，服务商选 DeepSeek，保存\n\n**方式二：智谱免费模型（零成本）**\n\n1. 在 [bigmodel.cn](https://open.bigmodel.cn) 注册并创建 API Key\n2. 服务商选「自定义」，接口地址填 `https://open.bigmodel.cn/api/paas/v4`\n3. 模型填 `glm-4-flash`（免费），粘贴 Key 保存\n\nKey 只存在你自己的浏览器里，调用直接发送给对应服务商，本站不经手、不收费。',
 };
