@@ -7,6 +7,7 @@ import { renderRoadmap, renderNotFound } from './views/roadmapView.js';
 import { renderTopic, destroyTopicView } from './views/topicView.js';
 import { getLangDef, getLangIds } from './content.js';
 import { lastVisitSet } from './progress.js';
+import { createAiChat } from './components/aiChat.js';
 
 const THEME_KEY = 'plw:theme';
 
@@ -76,6 +77,9 @@ document.getElementById('btn-lang').addEventListener('click', () => {
 document.getElementById('btn-theme').addEventListener('click', toggleTheme);
 
 startRouter();
+
+// ---- AI 悬浮助手 ----
+createAiChat();
 
 // ---- PWA Service Worker ----
 function registerSW() {

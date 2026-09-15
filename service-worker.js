@@ -3,7 +3,7 @@
 //       同源静态 cache-first（忽略 ?v= 查询参数）
 //       Pyodide CDN（jsdelivr /pyodide/）：运行时 cache-first——首次联网下载后离线可用
 //       其余第三方域（godbolt 等）网络透传，不缓存
-const CACHE_VERSION = 'plw-v3';
+const CACHE_VERSION = 'plw-v4';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -27,6 +27,7 @@ const SHELL_FILES = [
   './js/views/topicView.js',
   './js/components/workspace.js',
   './js/components/editor.js',
+  './js/components/aiChat.js',
   './js/judge.js',
   './js/diagnose.js',
   './js/stepper/trace.js',
