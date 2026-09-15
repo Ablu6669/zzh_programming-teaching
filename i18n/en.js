@@ -109,6 +109,7 @@ export default {
   'ai.noKey': 'This mode needs an API Key — click ⚙ and paste yours',
   'ai.provider': 'Provider',
   'ai.providerFree': 'Free online (no key needed)',
+  'ai.providerHunyuan': 'Tencent Hunyuan Lite (free forever)',
   'ai.providerCustom': 'Custom (OpenAI-compatible)',
   'ai.apiKey': 'API Key',
   'ai.baseURL': 'Base URL',
@@ -117,5 +118,5 @@ export default {
   'ai.saved': 'Saved ✓',
   'ai.keyLocal': 'Your key is stored only in this browser — it never leaves your device',
   'ai.helpTitle': 'How to get an API key? (about 3 min)',
-  'ai.helpBody': '**Option 1: DeepSeek (recommended, works in most regions)**\n\n1. Sign up at [DeepSeek Platform](https://platform.deepseek.com)\n2. Top up from $1.5 — new accounts get free credits\n3. Create an API key on the "API Keys" page and copy the `sk-` string\n4. Paste it above, pick DeepSeek as provider, save\n\n**Option 2: Free model via Zhipu (zero cost)**\n\n1. Sign up at [bigmodel.cn](https://open.bigmodel.cn) and create an API key\n2. Pick "Custom" as provider, base URL: `https://open.bigmodel.cn/api/paas/v4`\n3. Model: `glm-4-flash` (free), paste your key and save\n\nYour key stays in your browser and requests go straight to the provider — this site never sees it and never charges anything.',
+  'ai.helpBody': '**Option 1: Tencent Hunyuan Lite (free forever, recommended)**\n\n1. Sign up and create an API key at the [Tencent Hunyuan console](https://console.cloud.tencent.com/hunyuan)\n2. Pick "Tencent Hunyuan Lite" as provider, paste your key and save\n3. The default model `hunyuan-lite` is free forever — no top-up needed\n\n**Option 2: DeepSeek (stronger, works in most regions)**\n\n1. Sign up at [DeepSeek Platform](https://platform.deepseek.com)\n2. Top up from $1.5 — new accounts get free credits\n3. Create an API key on the "API Keys" page and copy the `sk-` string, paste it above\n\n**Option 3: Free model via Zhipu (zero cost)**\n\n1. Sign up at [bigmodel.cn](https://open.bigmodel.cn) and create an API key\n2. Pick "Custom" as provider, base URL: `https://open.bigmodel.cn/api/paas/v4`\n3. Model: `glm-4-flash` (free), paste your key and save\n\nYour key stays in your browser and requests go straight to the provider — this site never sees it and never charges anything.',
 };

@@ -12,8 +12,10 @@ const MAX_SAVED = 40;       // 本地持久化消息上限
 const MAX_API_MESSAGES = 12; // 每次请求携带的历史消息上限
 
 // OpenAI chat-completions 兼容端点。free 为 pollinations 开放端点（无需 Key）。
+// hunyuan 为腾讯云混元（hunyuan-lite 模型永久免费）。
 const PROVIDERS = {
   free:     { baseURL: 'https://text.pollinations.ai/openai', model: 'openai', needKey: false },
+  hunyuan:  { baseURL: 'https://api.hunyuan.cloud.tencent.com/v1', model: 'hunyuan-lite', needKey: true },
   deepseek: { baseURL: 'https://api.deepseek.com', model: 'deepseek-chat', needKey: true },
   openai:   { baseURL: 'https://api.openai.com/v1', model: 'gpt-4o-mini', needKey: true },
   custom:   { baseURL: '', model: '', needKey: true },
@@ -169,6 +171,7 @@ function buildDOM() {
         <label class="ai-field"><span>${t('ai.provider')}</span>
           <select class="ai-provider">
             <option value="free">${t('ai.providerFree')}</option>
+            <option value="hunyuan">${t('ai.providerHunyuan')}</option>
             <option value="deepseek">DeepSeek</option>
             <option value="openai">OpenAI</option>
             <option value="custom">${t('ai.providerCustom')}</option>
