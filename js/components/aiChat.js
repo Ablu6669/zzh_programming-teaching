@@ -25,7 +25,8 @@ let el = null;          // 根 DOM（含悬浮球 + 面板）
 let open = false;
 let busy = false;
 let clearArmed = null;  // 两段式清空确认的定时器
-let messages = loadJSON(CHAT_KEY, []);
+// 持久化数据可能被篡改/损坏（非数组时 .map 会崩），加载时校验结构
+let messages = (() => { const m = loadJSON(CHAT_KEY, []); return Array.isArray(m) ? m : []; })();
 
 function loadJSON(key, fallback) {
   try {
@@ -358,8 +359,12 @@ function saveSettings() {
   };
   saveJSON(SETTINGS_KEY, s);
   const note = $ai('.ai-note');
-  note.textContent = t('ai.saved');
-  setTimeout(() => { note.textContent = t('ai.keyLocal'); }, 1500);
+  // 安全提示：custom 填 http://（非本机）意味着 Bearer Key 明文传输
+  const insecureHttp = s.provider === 'custom'
+    && /^http:\/\//i.test(s.baseURL)
+    && !/^http:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(s.baseURL);
+  note.textContent = insecureHttp ? t('ai.warnHttp') : t('ai.saved');
+  setTimeout(() => { note.textContent = t('ai.keyLocal'); }, 2500);
 }
 
 function bindEvents() {
@@ -373,11 +378,13 @@ function bindEvents() {
     if (show) renderSettings();
   });
   $ai('.ai-provider').addEventListener('change', () => {
-    // 切换服务商：显隐字段并把模型重置为该家默认
+    // 切换服务商：显隐字段并把模型重置为该家默认；
+    // 同时清空 Key 输入框——各家 Key 不通用，残留会导致 A 家 Key 被误发给 B 家
     const prov = $ai('.ai-provider').value;
     $ai('.ai-key-field').hidden = !PROVIDERS[prov].needKey;
     $ai('.ai-base-field').hidden = prov !== 'custom';
     if (PROVIDERS[prov].model) $ai('.ai-model').value = PROVIDERS[prov].model;
+    $ai('.ai-key').value = '';
   });
   $ai('.ai-save').addEventListener('click', saveSettings);
   $ai('.ai-send').addEventListener('click', send);

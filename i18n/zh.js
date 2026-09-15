@@ -116,6 +116,7 @@ export default {
   'ai.model': '模型',
   'ai.save': '保存',
   'ai.saved': '已保存 ✓',
+  'ai.warnHttp': '⚠ 已保存，但接口地址是 http://，Key 将明文传输，建议改用 https://',
   'ai.keyLocal': 'Key 仅保存在你的浏览器本地，不会上传到任何服务器',
   'ai.helpTitle': '如何获取 API Key？（约 3 分钟）',
   'ai.helpBody': '**方式一：腾讯混元 Lite（永久免费，推荐）**\n\n1. 在 [腾讯云混元控制台](https://console.cloud.tencent.com/hunyuan) 注册并创建 API Key\n2. 服务商选「腾讯混元 Lite」，粘贴 Key 保存\n3. 默认模型 `hunyuan-lite` 永久免费，无需充值\n\n**方式二：DeepSeek（效果更强，国内直连）**\n\n1. 注册 [DeepSeek 开放平台](https://platform.deepseek.com)（手机号即可）\n2. 充值 10 元起（支付宝 / 微信），新用户有免费额度\n3. 在「API Keys」页新建并复制 `sk-` 开头的 Key，粘贴保存\n\n**方式三：智谱免费模型（零成本）**\n\n1. 在 [bigmodel.cn](https://open.bigmodel.cn) 注册并创建 API Key\n2. 服务商选「自定义」，接口地址填 `https://open.bigmodel.cn/api/paas/v4`\n3. 模型填 `glm-4-flash`（免费），粘贴 Key 保存\n\nKey 只存在你自己的浏览器里，调用直接发送给对应服务商，本站不经手、不收费。',
