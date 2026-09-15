@@ -37,6 +37,10 @@ html[data-theme="light"] {
 /* ============ 基础 ============ */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* [hidden] 兜底：作者样式里的 display:flex 会盖掉 UA 的 [hidden]{display:none}
+   （.ai-panel / .ai-settings / .ai-field 都中过招 → 面板关不掉、设置区关不掉），
+   这里用 !important 把它按住，避免以后新增组件再踩同一个坑 */
+[hidden] { display: none !important; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -565,8 +569,10 @@ html[data-theme="light"] .step-ln.cur { background: rgba(8, 145, 178, .10); }
 .ai-panel {
   position: fixed; right: 20px; bottom: 20px;
   width: min(400px, calc(100vw - 24px));
+  /* --app-vh 由 JS 按 visualViewport 实时写入（比 100vh 准：不含被浏览器工具栏/软键盘占掉的部分） */
   height: calc(100vh - 40px);
-  height: min(560px, calc(100dvh - 40px));
+  height: min(560px, calc(var(--app-vh, 100vh) - 40px));
+  max-height: min(560px, calc(var(--app-vh, 100vh) - 40px));
   display: flex; flex-direction: column;
   background: var(--bg-panel); border: 1px solid var(--border);
   border-radius: 14px; box-shadow: var(--shadow); overflow: hidden;
@@ -581,10 +587,11 @@ html[data-theme="light"] .step-ln.cur { background: rgba(8, 145, 178, .10); }
 }
 .ai-badge { font-weight: 600; white-space: nowrap; }
 .ai-ctx { flex: 1; min-width: 0; font-size: 12px; color: var(--fg-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ai-head-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.ai-head-btns { display: flex; gap: 6px; flex-shrink: 0; }
 .ai-icon-btn {
-  width: 28px; height: 28px; border-radius: 8px; border: none; cursor: pointer;
-  background: transparent; color: var(--fg-dim); font-size: 14px; line-height: 1;
+  width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer;
+  background: transparent; color: var(--fg-dim); font-size: 15px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
 }
 .ai-icon-btn:hover { background: var(--bg); color: var(--fg); }
 .ai-icon-btn.ai-armed { background: var(--err); color: #fff; }
@@ -620,7 +627,12 @@ html[data-theme="light"] .step-ln.cur { background: rgba(8, 145, 178, .10); }
 .ai-help-body strong { color: var(--fg); }
 
 /* 消息区 */
-.ai-msgs { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+/* 消息区：独立滚动容器 + 阻断滚动穿透（滚到底不会带着页面一起滚） */
+.ai-msgs {
+  flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px; display: flex; flex-direction: column; gap: 10px;
+}
 .ai-msg { max-width: 88%; }
 .ai-msg.ai-user { align-self: flex-end; }
 .ai-msg.ai-ai { align-self: flex-start; }
@@ -672,7 +684,25 @@ html[data-theme="light"] .step-ln.cur { background: rgba(8, 145, 178, .10); }
 
 @media (max-width: 640px) {
   .ai-root { right: 12px; bottom: 12px; }
-  .ai-panel { right: 8px; bottom: 8px; width: calc(100vw - 16px); height: calc(100vh - 72px); height: calc(100dvh - 72px); }
+  /* 手机真·全屏面板：
+     - 左右拉开用 left/right（不用 width+100vw，避免横向滚动条把面板挤歪）
+     - 高度取 JS 写入的可视视口高度，保证头部按钮永远在屏幕内
+     - bottom 叠加 --app-bottom，软键盘弹出时整块面板上移而不被键盘盖住 */
+  .ai-panel {
+    left: 8px; right: 8px; width: auto;
+    bottom: calc(8px + var(--app-bottom, 0px));
+    height: calc(var(--app-vh, 100vh) - 16px);
+    max-height: calc(var(--app-vh, 100vh) - 16px);
+  }
+  /* 触摸目标放大到 ≥36px（原来 28px 手指点不准） */
+  .ai-icon-btn { width: 36px; height: 36px; font-size: 16px; border-radius: 10px; }
+  .ai-head { padding: 8px 8px; gap: 6px; }
+  .ai-send { width: 44px; height: 44px; font-size: 17px; }
+  .ai-input { font-size: 15px; }   /* <16px 时 iOS 会自动放大页面 */
+  .ai-msgs { padding: 10px; }
+  .ai-field span { flex: 0 0 68px; }
+  .ai-field select, .ai-field input { font-size: 15px; padding: 8px; }
+  .ai-save { padding: 8px 16px; font-size: 13px; }
   /* 全屏面板时显示遮罩：点击面板外收起（兜底出口） */
   .ai-root.ai-open .ai-backdrop {
     display: block; position: fixed; inset: 0; z-index: -1;

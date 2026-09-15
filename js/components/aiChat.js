@@ -48,6 +48,20 @@ function loadSettings() {
   };
 }
 
+// ---- 视口自适应 ----
+// 手机上直接用 CSS 的 100vh 会让面板比可视区更高 → 头部按钮被顶到屏幕外点不到；
+// 100dvh 在老安卓上不支持。这里统一用 visualViewport 的真实可视高度写入 CSS 变量：
+//   --app-vh     可视高度（软键盘弹出后会变小）
+//   --app-bottom 底部需要抬高的距离（键盘遮挡量），面板据此整体上移
+function syncViewport() {
+  const root = document.documentElement;
+  const vv = window.visualViewport;
+  const h = (vv && vv.height) || window.innerHeight || 0;
+  if (h) root.style.setProperty('--app-vh', h + 'px');
+  const lift = vv ? Math.max(0, window.innerHeight - vv.height - vv.offsetTop) : 0;
+  root.style.setProperty('--app-bottom', lift + 'px');
+}
+
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -290,6 +304,7 @@ function setOpen(v) {
   $ai('.ai-panel').hidden = !v;
   $ai('.ai-fab').classList.toggle('ai-fab-open', v);
   if (v) {
+    syncViewport();          // 打开瞬间重算一次，避免旋转后残留旧值
     renderStatic();
     renderMsgs();
     setTimeout(() => $ai('.ai-input').focus(), 50);
@@ -403,6 +418,15 @@ function bindEvents() {
 // ---- 入口 ----
 export function createAiChat() {
   if (el) return; // 已初始化
+  syncViewport();
+  // 浏览器工具栏收放 / 软键盘升降 / 旋转屏幕都会改变可视区，需实时同步
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncViewport);
+    window.visualViewport.addEventListener('scroll', syncViewport);
+  }
+  window.addEventListener('resize', syncViewport);
+  window.addEventListener('orientationchange', syncViewport);
+
   el = buildDOM();
   bindEvents();
   renderStatic();
