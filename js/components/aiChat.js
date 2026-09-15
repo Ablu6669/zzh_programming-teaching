@@ -157,6 +157,7 @@ function buildDOM() {
   const root = document.createElement('div');
   root.className = 'ai-root';
   root.innerHTML = `
+    <div class="ai-backdrop"></div>
     <button class="ai-fab" aria-label="${t('ai.title')}">🤖</button>
     <div class="ai-panel" hidden>
       <div class="ai-head">
@@ -285,6 +286,7 @@ function syncSettingsVisibility() {
 // ---- 交互 ----
 function setOpen(v) {
   open = v;
+  el.classList.toggle('ai-open', v);
   $ai('.ai-panel').hidden = !v;
   $ai('.ai-fab').classList.toggle('ai-fab-open', v);
   if (v) {
@@ -370,6 +372,8 @@ function saveSettings() {
 function bindEvents() {
   $ai('.ai-fab').addEventListener('click', () => setOpen(!open));
   $ai('.ai-close-btn').addEventListener('click', () => setOpen(false));
+  // 移动端遮罩：点击面板外任意区域收起（兜底出口，防止头部按钮被遮挡时无法关闭）
+  $ai('.ai-backdrop').addEventListener('click', () => setOpen(false));
   $ai('.ai-clear-btn').addEventListener('click', clearChat);
   $ai('.ai-settings-btn').addEventListener('click', () => {
     const box = $ai('.ai-settings');
