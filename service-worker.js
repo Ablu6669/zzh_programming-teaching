@@ -4,7 +4,10 @@
 //         —— 改版立即生效，断网仍可用；离线时的内容来自上一次成功访问写下的运行缓存
 //       Pyodide CDN（jsdelivr /pyodide/）：运行时 cache-first——首次联网下载后离线可用
 //       其余第三方域（godbolt 等）网络透传，不缓存
-const CACHE_VERSION = 'plw-v5';
+//
+// CACHE_VERSION 由 tools/build.mjs 按 style.css / js/main.js 的内容指纹自动写入。
+// 别手改：每次内容变化都会让 SW 文件本身变化 → 浏览器判定为新 SW → 旧缓存清空。
+const CACHE_VERSION = 'plw-98dd0072-f7821d81';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -54,11 +57,14 @@ const SHELL_FILES = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
+    // 逐个 add 而不是 addAll：addAll 是「全有或全无」，任何一个文件 404 都会让整次
+    // 预缓存失败（之前就有临时文件缺失导致 shell 空着的情况）。逐个失败只跳过那一个。
     caches.open(SHELL_CACHE)
-      .then((cache) => cache.addAll(SHELL_FILES).catch((err) => {
-        // 单个文件失败不应阻断 install（开发态可能有临时文件缺失）
-        console.warn('[SW] 部分 shell 预缓存失败：', err);
-      }))
+      .then((cache) => Promise.all(
+        SHELL_FILES.map((url) =>
+          cache.add(url).catch((err) => console.warn('[SW] 预缓存跳过', url, err && err.message))
+        )
+      ))
       .then(() => self.skipWaiting())
   );
 });
@@ -71,6 +77,12 @@ self.addEventListener('activate', (event) => {
       ))
       .then(() => self.clients.claim())
   );
+});
+
+// 自愈出口：页面检测到自己在用旧版时可以让 SW 立即激活 / 自我注销
+self.addEventListener('message', (e) => {
+  if (e.data === 'SKIP_WAITING') self.skipWaiting();
+  if (e.data === '__swUnregisterStale') self.registration.unregister();
 });
 
 self.addEventListener('fetch', (event) => {

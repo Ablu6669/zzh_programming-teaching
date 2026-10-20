@@ -16,7 +16,7 @@ Java · C · C++ · Python 四门语言的交互式学习网站：每个知识�
 - **学习进度本地持久化**：localStorage 保存做题状态与代码草稿
 - **PWA 离线支持**：service-worker 预缓存首页壳 + 同源静态，导航失败回落到 `offline.html`
 - **暗色 / 亮色主题**（CSS 变量双主题）
-- **零构建纯静态站**：原生 ES Modules + 自写 hash 路由，可直接部署 GitHub Pages
+- **零构建纯静态站**：原生 ES Modules + 自写 hash 路由，可直接部署 GitHub Pages（唯一"构建"步骤 `tools/build.mjs` 只写内容指纹，不打包）
 
 ## 技术栈
 
@@ -30,7 +30,7 @@ Java · C · C++ · Python 四门语言的交互式学习网站：每个知识�
 index.html            # SPA 唯一入口（含 PWA manifest / theme-color 引用）
 style.css             # 全部样式（CSS 变量双主题）
 manifest.webmanifest  # PWA 应用清单
-service-worker.js     # 离线缓存（navigation network-first，静态 cache-first）
+service-worker.js     # 离线缓存（导航/静态均 network-first，回落到缓存）
 offline.html          # 离线回退页
 favicon.svg / icon.svg # 应用图标（含 maskable 变体）
 js/
@@ -59,6 +59,7 @@ content/              # 四门语言的教学内容（双语，共 88 题）
 i18n/                 # UI 词典 zh.js / en.js
 vendor/codemirror/    # 自托管 CodeMirror
 tools/
+  build.mjs           # 构建：把 style.css / js/main.js 的内容指纹写进 index.html 与 SW
   verify_content.mjs  # 用真实执行后端实测全部 88 题 solution
   check_i18n.mjs      # i18n 完整性三重校验（词典/引用/双语对）
   _batch2_check.mjs   # 88 题 hints×5 + solutionNote 双语自检
@@ -80,6 +81,8 @@ python -m http.server 8000
 ## 质量校验
 
 ```bash
+node tools/build.mjs            # 构建：写指纹（改了 style.css / js/main.js 后必跑）
+node tools/build.mjs --check    # 只检查指纹是否最新（提交前/CI 用，有偏差退出码 1）
 node tools/check_i18n.mjs       # 词典键一致 / 引用完整 / 双语对非空
 node tools/verify_content.mjs   # 在线实测全部 88 题 solution 与期望输出
 node tools/_batch2_check.mjs <python|c|cpp|java>  # 单语言 22 题 hints×5 + solutionNote 自检
@@ -106,7 +109,11 @@ node tools/ui_probe.mjs http://127.0.0.1:8000/index.html --mobile   # 390x844 �
 3. 仓库 **Settings → Pages → Source** 选择 **GitHub Actions**（部分仓库首次推送后会自动配置）
 4. 约 1 分钟后访问 `https://<用户名>.github.io/<仓库名>/`
 
-> 发版更新：改完代码提交推送即可；`index.html` 中 `?v=20260907` 版本号建议随发版递增以刷新缓存。
+> 发版更新：改完代码 → `node tools/build.mjs` → 提交推送。
+> 指纹由构建脚本自动写入 `index.html` 的 `?v=` 与 `service-worker.js` 的 `CACHE_VERSION`，
+> 不用再手改版本号；SW 内容随指纹变化，浏览器会判定为新 SW 并清掉旧缓存。
+> 另外 `index.html` 里有一段「版本守卫」：检测到浏览器在跑旧版时会绕过缓存刷新一次。
+> ⚠️ 只改 `index.html` 之外的 JS/CSS 而忘了构建，仍可能让用户吃到旧文件。
 
 ## 致谢
 

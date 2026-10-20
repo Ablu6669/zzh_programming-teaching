@@ -12,7 +12,30 @@
   <link rel="stylesheet" href="vendor/codemirror/codemirror.min.css">
   <link rel="stylesheet" href="vendor/codemirror/dracula.min.css">
   <link rel="stylesheet" href="vendor/codemirror/show-hint.css">
-  <link rel="stylesheet" href="style.css?v=20260916c">
+  <link rel="stylesheet" href="style.css?v=98dd0072">
+
+  <!-- 版本守卫：检测到浏览器还在用旧版 app shell 时，绕过一切缓存取最新 index.html 并刷新一次。
+       背景：Service Worker 预缓存的是无指纹的裸 URL，network-first 回落到缓存时会喂出旧
+       CSS/JS，表现就是「改了没生效 / 那三个按钮点了没反应」。BUILD 由 tools/build.mjs 写入。 -->
+  <script>
+  (function () {
+    var BUILD = '98dd0072-f7821d81';
+    try {
+      var probe = new URL('index.html', location.href);
+      probe.searchParams.set('_v', BUILD);
+      probe.searchParams.set('_t', String(Date.now()));
+      fetch(probe.toString(), { cache: 'reload', credentials: 'same-origin' })
+        .then(function (r) { return r.ok ? r.text() : ''; })
+        .then(function (t) {
+          if (!t || t.indexOf(BUILD) !== -1) return;      // 已经是最新的
+          if (sessionStorage.getItem('plw-build-guard') === BUILD) return; // 防循环
+          sessionStorage.setItem('plw-build-guard', BUILD);
+          location.replace(probe.toString());              // 带新指纹重新加载一次
+        })
+        .catch(function () { /* 离线时静默跳过 */ });
+    } catch (e) { /* 老浏览器不支持 URL 构造，忽略 */ }
+  })();
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -44,6 +67,6 @@
   <script src="vendor/codemirror/activeline.min.js"></script>
   <script src="vendor/codemirror/show-hint.min.js"></script>
 
-  <script type="module" src="js/main.js?v=20260915a"></script>
+  <script type="module" src="js/main.js?v=f7821d81"></script>
 </body>
 </html>

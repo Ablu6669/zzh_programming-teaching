@@ -82,13 +82,52 @@ startRouter();
 createAiChat();
 
 // ---- PWA Service Worker ----
+// SW 是「改了没生效」这类幽灵 bug 的常见源头：预缓存存的是无指纹的裸 URL，
+// network-first 一旦回落到缓存就会喂出旧 CSS/JS。两道保险：
+//   1) 新 SW 进入 installed 后立刻 skipWaiting 激活（旧缓存由 activate 清掉）
+//   2) 本页 JS 的版本号与最新 index.html 不一致 → 注销 SW → 带新版本重载一次
 function registerSW() {
   if (!('serviceWorker' in navigator)) return;
   const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   const isHttps = location.protocol === 'https:';
   if (!isLocal && !isHttps) return;
-  navigator.serviceWorker.register('./service-worker.js').catch((err) => {
+
+  navigator.serviceWorker.register('./service-worker.js').then((reg) => {
+    if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+    reg.addEventListener('updatefound', () => {
+      const sw = reg.installing;
+      if (!sw) return;
+      sw.addEventListener('statechange', () => {
+        if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+          sw.postMessage('SKIP_WAITING');
+        }
+      });
+    });
+    reg.update().catch(() => { /* 离线时忽略 */ });
+  }).catch((err) => {
     console.warn('[SW] 注册失败：', err);
+  });
+
+  // 二次兜底：页面跑的是旧 JS（本地脚本的 v 与最新 index.html 不一致）时，
+  // 注销 SW + 清空缓存后带新版本号重载，避免被旧 shell 永久困住。
+  navigator.serviceWorker.ready.then(async () => {
+    try {
+      const res = await fetch('./index.html', { cache: 'reload' });
+      const txt = await res.text();
+      const latest = (txt.match(/js\/main\.js\?v=([^"']+)/) || [])[1];
+      const scriptEl = document.querySelector('script[src*="js/main.js"]');
+      const running = scriptEl ? scriptEl.src : '';
+      if (!latest || running.includes(`?v=${latest}`)) return;
+      if (sessionStorage.getItem('plw-sw-heal') === latest) return;
+      sessionStorage.setItem('plw-sw-heal', latest);
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (reg) await reg.unregister();
+      if (window.caches) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
+      location.reload();
+    } catch (e) { /* 离线或读取失败时静默 */ }
   });
 }
 registerSW();
